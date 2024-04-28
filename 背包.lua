@@ -505,7 +505,6 @@ function UIBackpack.handleShowAllRightCell(uid, type)
 
     local start = (UIBackpack.page[uid]['current'] - 1) * 30 + 1
     local endNum = UIBackpack.page[uid]['current'] * 30
-    print(start, endNum, UIBackpack.page[uid]['total'])
     for i = start, endNum do
 
         if playerObjs[i] ~= nil then
@@ -1091,7 +1090,6 @@ function UIBackpack.handleSortCells(uid, uielement)
                 return findIndex(QUALITY_ENUM, itemA.quality) > findIndex(QUALITY_ENUM, itemB.quality)
             end
         end)
-        print(PlayerBackpack[uid]['undressed'][menuType])
 
     else
         table.sort(PlayerBackpack[uid]['items'], function(a, b)
@@ -1120,7 +1118,6 @@ function UIBackpack.handleMainKuaijiejian(uid)
     local valuegroupkuaijielans = {kuaijielan_1, kuaijielan_2, kuaijielan_3, kuaijielan_4}
 
     for i, v in ipairs(valuegroupkuaijielans) do
-        print(i, v)
         if v == 101 then
             Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN_UI, UIBackpack.ELEMENT_ID.MAIN_KUAIJIEJIAN["no" .. i][1],
                 0)
