@@ -24,7 +24,7 @@ function PlayerBackpack.init(uid)
             shield = nil
         },
         undressed = {
-            weapon = {4146,4131},
+            weapon = { 4146, 4131 },
             hat = {},
             clothes = {},
             shoes = {},
@@ -32,7 +32,7 @@ function PlayerBackpack.init(uid)
             bracelet = {},
             shield = {}
         },
-        items = {{4150, 1}, {4151, 1}, {4152, 1}, {4153, 1}, {4154, 1}, {4155, 1}}
+        items = { { 4150, 1 }, { 4151, 1 }, { 4152, 1 }, { 4153, 1 }, { 4154, 1 }, { 4155, 1 } }
     }
 
     -- 云服获取玩家背包数据回调方法
@@ -54,7 +54,6 @@ function PlayerBackpack.init(uid)
 
     local cloudRet = CloudSever:getDataListByKey(MINI_CLOUD_TABLE, "player_" .. uid, callback)
     print("PlayerBackpack.init 云服获取玩家背包数据结果: ", cloudRet)
-
 end
 
 --- 玩家背包数据上传保存
@@ -77,9 +76,9 @@ function PlayerBackpack.addObject(uid, itemid)
 
     local _, bpLimit = VarLib2:getPlayerVarByName(uid, 3, "背包容量")
     local currentBPNum = #PlayerBackpack[uid]['undressed']['weapon'] + #PlayerBackpack[uid]['undressed']['hat'] +
-                             #PlayerBackpack[uid]['undressed']['clothes'] + #PlayerBackpack[uid]['undressed']['shoes'] +
-                             #PlayerBackpack[uid]['undressed']['ring'] + #PlayerBackpack[uid]['undressed']['bracelet'] +
-                             #PlayerBackpack[uid]['undressed']['shield'] + #PlayerBackpack[uid]['items']
+            #PlayerBackpack[uid]['undressed']['clothes'] + #PlayerBackpack[uid]['undressed']['shoes'] +
+            #PlayerBackpack[uid]['undressed']['ring'] + #PlayerBackpack[uid]['undressed']['bracelet'] +
+            #PlayerBackpack[uid]['undressed']['shield'] + #PlayerBackpack[uid]['items']
 
     Backpack:clearAllPack(uid) -- 清空玩家游戏默认背包数据
 
@@ -145,7 +144,6 @@ function PlayerBackpack.calculateAttr(uid)
                         jinyanshouyi = jinyanshouyi + v[2]
                     elseif v[1] == 50010 then
                         diaobaolv = diaobaolv + v[2]
-
                     elseif v[1] == 50011 then
                         gjlbfb = gjlbfb + v[2]
                     elseif v[1] == 50012 then
@@ -155,10 +153,8 @@ function PlayerBackpack.calculateAttr(uid)
                     elseif v[1] == 50014 then
                         smzhfbfb = smzhfbfb + v[2]
                     end
-
                 end
             end
-
         end
     end
 
@@ -193,7 +189,7 @@ function PlayerBackpack.changWeaponSkin(uid)
                 z = 0
             }, 0, 0, 2)
             print("PlayerBackpack.changWeaponSkin 更改武器皮肤结果: ", result, weaponId,
-                PlayerBackpack[uid].dressed["weapon" .. i], imgInfo, result)
+                    PlayerBackpack[uid].dressed["weapon" .. i], imgInfo, result)
         else
             local imgInfo = Graphics:makeGraphicsImage(ALL_BACKPACK_ITEMS[4098].img, 1.1, 100, 1)
             local result = Graphics:createGraphicsImageByActor(weaponId, imgInfo, {
@@ -213,36 +209,36 @@ UIBackpack = {
         MAIN = "7346489952599218400",
         -- 背包-右侧-导航栏 { 类型, ID }
         RIGHT_NAV_MENUS = {
-            ["7346489952599218400_178"] = {"weapon", "7346489952599218400_179"},
-            ["7346489952599218400_647"] = {"hat", "7346489952599218400_648"},
-            ["7346489952599218400_649"] = {"clothes", "7346489952599218400_650"},
-            ["7346489952599218400_651"] = {"shoes", "7346489952599218400_652"},
-            ["7346489952599218400_653"] = {"ring", "7346489952599218400_654"},
-            ["7346489952599218400_655"] = {"bracelet", "7346489952599218400_656"},
-            ["7346489952599218400_657"] = {"shield", "7346489952599218400_658"},
-            ["7346489952599218400_659"] = {"items", "7346489952599218400_660"}
+            ["7346489952599218400_178"] = { "weapon", "7346489952599218400_179" },
+            ["7346489952599218400_647"] = { "hat", "7346489952599218400_648" },
+            ["7346489952599218400_649"] = { "clothes", "7346489952599218400_650" },
+            ["7346489952599218400_651"] = { "shoes", "7346489952599218400_652" },
+            ["7346489952599218400_653"] = { "ring", "7346489952599218400_654" },
+            ["7346489952599218400_655"] = { "bracelet", "7346489952599218400_656" },
+            ["7346489952599218400_657"] = { "shield", "7346489952599218400_658" },
+            ["7346489952599218400_659"] = { "items", "7346489952599218400_660" }
         },
         -- 品质
         QUALITY_BG = {
-            ["普通"] = {"8_1118247136_1704453713", "8_1118247136_1710515583"},
-            ["精良"] = {"8_1118247136_1705398630", "8_1118247136_1705214792"},
-            ["完美"] = {"8_1118247136_1705398618", "8_1118247136_1704451287"},
-            ["史诗"] = {"8_1118247136_1705398641", "8_1118247136_1710515556"},
-            ["传说"] = {"8_1118247136_1705398636", "8_1118247136_1710515564"},
-            ["神话"] = {"8_1118247136_1705398647", "8_1118247136_1710515571"},
-            ["至尊"] = {"8_1118247136_1705398625", "8_1118247136_1710515526"}
+            ["普通"] = { "8_1118247136_1704453713", "8_1118247136_1710515583" },
+            ["精良"] = { "8_1118247136_1705398630", "8_1118247136_1705214792" },
+            ["完美"] = { "8_1118247136_1705398618", "8_1118247136_1704451287" },
+            ["史诗"] = { "8_1118247136_1705398641", "8_1118247136_1710515556" },
+            ["传说"] = { "8_1118247136_1705398636", "8_1118247136_1710515564" },
+            ["神话"] = { "8_1118247136_1705398647", "8_1118247136_1710515571" },
+            ["至尊"] = { "8_1118247136_1705398625", "8_1118247136_1710515526" }
         },
         -- 背包-右侧-所有单元格
-        RIGHT_CELLS = {"7346489952599218400_675", "7346489952599218400_679", "7346489952599218400_683",
-                       "7346489952599218400_687", "7346489952599218400_691", "7346489952599218400_695",
-                       "7346489952599218400_703", "7346489952599218400_711", "7346489952599218400_715",
-                       "7346489952599218400_719", "7346489952599218400_723", "7346489952599218400_727",
-                       "7346489952599218400_731", "7346489952599218400_735", "7346489952599218400_739",
-                       "7346489952599218400_743", "7346489952599218400_747", "7346489952599218400_751",
-                       "7346489952599218400_755", "7346489952599218400_759", "7346489952599218400_763",
-                       "7346489952599218400_767", "7346489952599218400_771", "7346489952599218400_775",
-                       "7346489952599218400_875", "7346489952599218400_879", "7346489952599218400_883",
-                       "7346489952599218400_887", "7346489952599218400_891", "7346489952599218400_895"},
+        RIGHT_CELLS = { "7346489952599218400_675", "7346489952599218400_679", "7346489952599218400_683",
+                        "7346489952599218400_687", "7346489952599218400_691", "7346489952599218400_695",
+                        "7346489952599218400_703", "7346489952599218400_711", "7346489952599218400_715",
+                        "7346489952599218400_719", "7346489952599218400_723", "7346489952599218400_727",
+                        "7346489952599218400_731", "7346489952599218400_735", "7346489952599218400_739",
+                        "7346489952599218400_743", "7346489952599218400_747", "7346489952599218400_751",
+                        "7346489952599218400_755", "7346489952599218400_759", "7346489952599218400_763",
+                        "7346489952599218400_767", "7346489952599218400_771", "7346489952599218400_775",
+                        "7346489952599218400_875", "7346489952599218400_879", "7346489952599218400_883",
+                        "7346489952599218400_887", "7346489952599218400_891", "7346489952599218400_895" },
         -- 背包-右侧-穿戴装备
         LEFT_CELLS = {
             -- 帽子
@@ -362,9 +358,9 @@ UIBackpack = {
                 hp = "7346489952599218400_820",
                 qianghua1 = "7346489952599218400_818",
                 qianghua2 = "7346489952599218400_822",
-                other_attr = {{"7346489952599218400_907", "7346489952599218400_908"},
-                              {"7346489952599218400_909", "7346489952599218400_910"},
-                              {"7346489952599218400_911", "7346489952599218400_912"}},
+                other_attr = { { "7346489952599218400_907", "7346489952599218400_908" },
+                               { "7346489952599218400_909", "7346489952599218400_910" },
+                               { "7346489952599218400_911", "7346489952599218400_912" } },
                 other_effect = "7346489952599218400_923",
                 undress = "7346489952599218400_826"
             },
@@ -380,9 +376,9 @@ UIBackpack = {
                 lv = "7346489952599218400_837",
                 gonjili = "7346489952599218400_841",
                 hp = "7346489952599218400_843",
-                other_attr = {{"7346489952599218400_924", "7346489952599218400_925"},
-                              {"7346489952599218400_926", "7346489952599218400_927"},
-                              {"7346489952599218400_928", "7346489952599218400_929"}},
+                other_attr = { { "7346489952599218400_924", "7346489952599218400_925" },
+                               { "7346489952599218400_926", "7346489952599218400_927" },
+                               { "7346489952599218400_928", "7346489952599218400_929" } },
                 other_effect = "7346489952599218400_932",
                 huishou = "7346489952599218400_852",
                 huishou_ok = "7346489952599218400_966",
@@ -400,10 +396,10 @@ UIBackpack = {
                 desc = "7346489952599218400_1059",
                 kuaijiejian = {
                     box = "7346489952599218400_1105",
-                    no1 = {"7346489952599218400_1090", "7346489952599218400_1092"},
-                    no2 = {"7346489952599218400_1094", "7346489952599218400_1096"},
-                    no3 = {"7346489952599218400_1098", "7346489952599218400_1100"},
-                    no4 = {"7346489952599218400_1102", "7346489952599218400_1104"}
+                    no1 = { "7346489952599218400_1090", "7346489952599218400_1092" },
+                    no2 = { "7346489952599218400_1094", "7346489952599218400_1096" },
+                    no3 = { "7346489952599218400_1098", "7346489952599218400_1100" },
+                    no4 = { "7346489952599218400_1102", "7346489952599218400_1104" }
                 },
                 ok = "7346489952599218400_1047"
             }
@@ -431,22 +427,22 @@ UIBackpack = {
         },
         BUY_CELL_OK = "7346489952599218400_1018",
         SORT_BTN = "7346489952599218400_778",
-         -- 主界面UI
+        -- 主界面UI
         MAIN_UI = "7346497485971855584",
         MAIN_KUAIJIEJIAN = {
-            no1 = {"7346497485971855584_85", "7346497485971855584_87"},
-            no2 = {"7346497485971855584_93", "7346497485971855584_95"},
-            no3 = {"7346497485971855584_97", "7346497485971855584_99"},
-            no4 = {"7346497485971855584_101", "7346497485971855584_103"}
+            no1 = { "7346497485971855584_85", "7346497485971855584_87" },
+            no2 = { "7346497485971855584_93", "7346497485971855584_95" },
+            no3 = { "7346497485971855584_97", "7346497485971855584_99" },
+            no4 = { "7346497485971855584_101", "7346497485971855584_103" }
         }
     },
     currentSelectMenuType = {}, -- 当前玩家选择的背包导航栏类型 如: {uid: weapon}
     currentSelectItemId = {}, -- 当前玩家选择的背包物品ID 如: {uid: 4148},
     currentSelectLeftCell = {}, -- 当前玩家选择的背包左侧单元格 如: {uid: weapon1}
-    page = {} -- 当前玩家背包分页信息 { uid: {current: 1, total: 10} }
+    page = {}                   -- 当前玩家背包分页信息 { uid: {current: 1, total: 10} }
 }
 
---- 右侧菜单栏点击切换事件处理 
+--- 右侧菜单栏点击切换事件处理
 ---@param uid number 玩家迷你号
 ---@param uielement string UI元素ID
 function UIBackpack.handleNavMenusChange(uid, uielement)
@@ -456,13 +452,13 @@ function UIBackpack.handleNavMenusChange(uid, uielement)
 
     for eleId, arr in pairs(UIBackpack.ELEMENT_ID.RIGHT_NAV_MENUS) do
         if eleId ~= uielement then
-            Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, eleId, "8_1118247136_1705214511") -- 未选中效果
+            Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, eleId, "8_1118247136_1705214511")     -- 未选中效果
             Customui:setColor(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.RIGHT_NAV_MENUS[eleId][2],
-                "0xf7f7f7") -- 未选中
+                    "0xf7f7f7")                                                                            -- 未选中
         else
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, uielement, "8_1118247136_1704451218") -- 已选中效果
             Customui:setColor(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.RIGHT_NAV_MENUS[uielement][2],
-                "0x4e5251") -- 已选中效果
+                    "0x4e5251")                                                                            -- 已选中效果
         end
     end
     UIBackpack.page[uid] = {
@@ -474,8 +470,7 @@ function UIBackpack.handleNavMenusChange(uid, uielement)
     UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
 
     print("UIBackpack.handleNavMenusChange 当前选择的背包导航栏类型: ",
-        UIBackpack.currentSelectMenuType[uid])
-
+            UIBackpack.currentSelectMenuType[uid])
 end
 
 --- 显示右侧背包所有单元格
@@ -505,10 +500,9 @@ function UIBackpack.handleShowAllRightCell(uid, type)
 
     local start = (UIBackpack.page[uid]['current'] - 1) * 30 + 1
     local endNum = UIBackpack.page[uid]['current'] * 30
+    print(start, endNum, UIBackpack.page[uid]['total'])
     for i = start, endNum do
-
         if playerObjs[i] ~= nil then
-
             local objid = (type == "items") and playerObjs[i][1] or playerObjs[i]
 
             local itemInfo = ALL_BACKPACK_ITEMS[objid]
@@ -529,7 +523,6 @@ function UIBackpack.handleShowAllRightCell(uid, type)
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, bgElementId)
         end
     end
-
 end
 
 --- 显示左侧背包所有单元格
@@ -539,7 +532,6 @@ function UIBackpack.handleShowAllLeftCell(uid)
         local playerDressedItemId = PlayerBackpack[uid]['dressed'][uiItem.type]
 
         if playerDressedItemId ~= nil then
-
             local itemInfo = ALL_BACKPACK_ITEMS[playerDressedItemId]
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem['addNumBg'])
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem["addNum"], "+0")
@@ -549,20 +541,16 @@ function UIBackpack.handleShowAllLeftCell(uid)
             local _, iconid = Valuegroup:getValueNoByName(18, "道具图片组", index, 0)
 
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem['icon'], iconid)
-            Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem['bg'],
-                UIBackpack.ELEMENT_ID.QUALITY_BG[itemInfo.quality][1])
+            Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem['bg'], UIBackpack.ELEMENT_ID.QUALITY_BG[itemInfo.quality][1])
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem['icon'])
 
             Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem["text"])
-
         else
             Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem["addNumBg"])
             Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem['icon'])
-            Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem['bg'],
-                UIBackpack.ELEMENT_ID.QUALITY_BG["普通"][1])
+            Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem['bg'], UIBackpack.ELEMENT_ID.QUALITY_BG["普通"][1])
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem['text'])
         end
-
     end
 end
 
@@ -570,7 +558,7 @@ end
 ---@param uid number
 ---@param uielement string
 function UIBackpack.handleAllDetailPanel(uid, uielement)
-    local isBaifengbiNums = {50004, 50005, 50004, 50006, 50008, 50009, 50010, 50011, 50012, 50013, 50014}
+    local isBaifengbiNums = { 50004, 50005, 50004, 50006, 50008, 50009, 50010, 50011, 50012, 50013, 50014 }
     local base_qianbi = 100 -- 回收基础钱币
     local calXianyuQianghuashi = function(type)
         local setXianyu = 0
@@ -601,36 +589,38 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         return setXianyu, setQianghuashi
     end
 
-    if isInArray(UIBackpack.ELEMENT_ID.RIGHT_CELLS, uielement) then -- 显示右侧详细面板
+    if isInArray(UIBackpack.ELEMENT_ID.RIGHT_CELLS, uielement) then
+        -- 显示右侧详细面板
         local idx = findIndex(UIBackpack.ELEMENT_ID.RIGHT_CELLS, uielement)
         local selectObjIdx = (UIBackpack.page[uid]['current'] - 1) * 30 + idx
 
         local currentSelectItemId = (UIBackpack.currentSelectMenuType[uid] == "items") and
-                                        PlayerBackpack[uid]['items'][selectObjIdx][1] or
-                                        PlayerBackpack[uid]['undressed'][UIBackpack.currentSelectMenuType[uid]][selectObjIdx]
+                PlayerBackpack[uid]['items'][selectObjIdx][1] or
+                PlayerBackpack[uid]['undressed'][UIBackpack.currentSelectMenuType[uid]][selectObjIdx]
         UIBackpack.currentSelectItemId[uid] = currentSelectItemId
         local iteminfo = ALL_BACKPACK_ITEMS[currentSelectItemId]
 
-        if UIBackpack.currentSelectMenuType[uid] ~= "items" then -- 显示装备面板
+        if UIBackpack.currentSelectMenuType[uid] ~= "items" then
+            -- 显示装备面板
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.panel)
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.tran)
 
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.panel_title,
-                iteminfo.name)
+                    iteminfo.name)
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.type,
-                "类型: " .. iteminfo.type)
+                    "类型: " .. iteminfo.type)
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.pinzhi,
-                "品质: " .. iteminfo.quality)
+                    "品质: " .. iteminfo.quality)
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.lv,
-                "等级: " .. iteminfo.lv)
+                    "等级: " .. iteminfo.lv)
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.gonjili,
-                "+" .. iteminfo.atk)
+                    "+" .. iteminfo.atk)
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.hp,
-                "+" .. iteminfo.hp)
+                    "+" .. iteminfo.hp)
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.panel_bg,
-                UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][2])
+                    UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][2])
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.icon_bg,
-                UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][1])
+                    UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][1])
 
             local _, index = Valuegroup:getGroupNoByValue(21, "道具类型组", currentSelectItemId, 0)
             local _, iconid = Valuegroup:getValueNoByName(18, "道具图片组", index, 0)
@@ -642,15 +632,14 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
                     if iteminfo.otherAttr[i] ~= nil then
                         if isInArray(isBaifengbiNums, iteminfo.otherAttr[i][1]) then
                             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[1],
-                                ITEMS_OTHER_ATTRS[iteminfo.otherAttr[i][1]])
+                                    ITEMS_OTHER_ATTRS[iteminfo.otherAttr[i][1]])
                             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[2],
-                                tostring(iteminfo.otherAttr[i][2] * 100) .. "%")
+                                    tostring(iteminfo.otherAttr[i][2] * 100) .. "%")
                         else
                             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[1],
-                                ITEMS_OTHER_ATTRS[iteminfo.otherAttr[i][1]])
+                                    ITEMS_OTHER_ATTRS[iteminfo.otherAttr[i][1]])
                             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[2], iteminfo.otherAttr[i][2])
                         end
-
                     else
                         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[1], "")
                         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[2], "")
@@ -665,36 +654,36 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
 
             if iteminfo.otherEffect ~= nil then
                 Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.other_effect,
-                    ITEMS_OTHER_ATTRS[iteminfo.otherEffect[1]])
+                        ITEMS_OTHER_ATTRS[iteminfo.otherEffect[1]])
             else
                 Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.other_effect,
-                    "")
+                        "")
             end
-
-        else -- 显示道具面板
+        else
+            -- 显示道具面板
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.panel)
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.tran)
 
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.panel_title,
-                iteminfo.name)
+                    iteminfo.name)
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.type,
-                "类型: " .. iteminfo.type)
+                    "类型: " .. iteminfo.type)
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.pinzhi,
-                "品质: " .. iteminfo.quality)
+                    "品质: " .. iteminfo.quality)
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.lv,
-                "等级: " .. iteminfo.lv)
+                    "等级: " .. iteminfo.lv)
 
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.desc,
-                iteminfo.desc)
+                    iteminfo.desc)
 
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.panel_bg,
-                UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][2])
+                    UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][2])
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.icon_bg,
-                UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][1])
+                    UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][1])
 
             if iteminfo.type == "材料" then
                 Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN,
-                    UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian.box)
+                        UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian.box)
                 Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.ok)
             else
                 -- 快捷栏变量
@@ -702,26 +691,24 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
                 local _, kuaijielan_2 = Valuegroup:getValueNoByName(21, "快捷键道具组", 2, uid)
                 local _, kuaijielan_3 = Valuegroup:getValueNoByName(21, "快捷键道具组", 3, uid)
                 local _, kuaijielan_4 = Valuegroup:getValueNoByName(21, "快捷键道具组", 4, uid)
-                local valuegroupkuaijielans = {kuaijielan_1, kuaijielan_2, kuaijielan_3, kuaijielan_4}
+                local valuegroupkuaijielans = { kuaijielan_1, kuaijielan_2, kuaijielan_3, kuaijielan_4 }
 
                 for i, v in ipairs(valuegroupkuaijielans) do
                     if v == 101 then
                         Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN,
-                            UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][1], 0)
+                                UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][1], 0)
                         Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN,
-                            UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][2], 0)
-
+                                UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][2], 0)
                     else
-
                         local _, temp_index = Valuegroup:getGroupNoByValue(21, "道具类型组", v, 0)
                         local _, temp_iconid = Valuegroup:getValueNoByName(18, "道具图片组", temp_index, 0)
 
                         Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN,
-                            UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][1], 100)
+                                UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][1], 100)
                         Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN,
-                            UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][2], 100)
+                                UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][2], 100)
                         Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN,
-                            UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][1], temp_iconid)
+                                UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][1], temp_iconid)
 
                         local findItemNum = function(itemid)
                             for findI, findArr in ipairs(PlayerBackpack[uid].items) do
@@ -732,12 +719,12 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
                         end
 
                         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN,
-                            UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][2], "" .. findItemNum(v))
+                                UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. i][2], "" .. findItemNum(v))
                     end
                 end
 
                 Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN,
-                    UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian.box)
+                        UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian.box)
                 Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.ok)
             end
 
@@ -745,10 +732,9 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
             local _, iconid = Valuegroup:getValueNoByName(18, "道具图片组", index, 0)
 
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.icon, iconid)
-
         end
-
-    elseif UIBackpack.ELEMENT_ID.LEFT_CELLS[uielement] ~= nil then -- 显示左侧详细面板 
+    elseif UIBackpack.ELEMENT_ID.LEFT_CELLS[uielement] ~= nil then
+        -- 显示左侧详细面板
         local selectType = UIBackpack.ELEMENT_ID.LEFT_CELLS[uielement].type
         local currentSelectItemId = PlayerBackpack[uid]['dressed'][selectType]
 
@@ -759,23 +745,23 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
             local iteminfo = ALL_BACKPACK_ITEMS[currentSelectItemId]
 
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.panel_title,
-                iteminfo['name'])
+                    iteminfo['name'])
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.type,
-                "类型: " .. iteminfo['type'])
+                    "类型: " .. iteminfo['type'])
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.pinzhi,
-                "品质: " .. iteminfo['quality'])
+                    "品质: " .. iteminfo['quality'])
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.lv,
-                "等级: " .. iteminfo['lv'])
+                    "等级: " .. iteminfo['lv'])
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.gonjili,
-                "+" .. iteminfo['atk'])
+                    "+" .. iteminfo['atk'])
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.hp,
-                "+" .. iteminfo['hp'])
+                    "+" .. iteminfo['hp'])
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.qianghua1, "+0")
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.qianghua2, "+0")
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.panel_bg,
-                UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][2])
+                    UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][2])
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.icon_bg,
-                UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][1])
+                    UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][1])
 
             local _, index = Valuegroup:getGroupNoByValue(21, "道具类型组", currentSelectItemId, 0)
             local _, iconid = Valuegroup:getValueNoByName(18, "道具图片组", index, 0)
@@ -784,18 +770,16 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
             for i, v in ipairs(UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.other_attr) do
                 if iteminfo['otherAttr'] ~= nil then
                     if iteminfo['otherAttr'][i] ~= nil then
-
                         if isInArray(isBaifengbiNums, iteminfo['otherAttr'][i][1]) then
                             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[1],
-                                ITEMS_OTHER_ATTRS[iteminfo['otherAttr'][i][1]])
+                                    ITEMS_OTHER_ATTRS[iteminfo['otherAttr'][i][1]])
                             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[2],
-                                tostring(iteminfo['otherAttr'][i][2] * 100) .. "%")
+                                    tostring(iteminfo['otherAttr'][i][2] * 100) .. "%")
                         else
                             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[1],
-                                ITEMS_OTHER_ATTRS[iteminfo['otherAttr'][i][1]])
+                                    ITEMS_OTHER_ATTRS[iteminfo['otherAttr'][i][1]])
                             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[2], iteminfo['otherAttr'][i][2])
                         end
-
                     else
                         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[1], "")
                         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, v[2], "")
@@ -810,38 +794,40 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
 
             if iteminfo['otherEffect'] ~= nil then
                 Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.other_effect,
-                    ITEMS_OTHER_ATTRS[iteminfo['otherEffect'][1]])
+                        ITEMS_OTHER_ATTRS[iteminfo['otherEffect'][1]])
             else
                 Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.other_effect,
-                    "")
+                        "")
             end
 
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.panel)
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.tran)
         end
-
-    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.tran then -- 隐藏左侧详细面板
+    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.tran then
+        -- 隐藏左侧详细面板
         Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.tran)
         Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.panel)
-    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.tran then -- 隐藏左侧详细面板
+    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.tran then
+        -- 隐藏左侧详细面板
         Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.tran)
         Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.panel)
         Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.panel)
-    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.huishou then -- 点击右侧面板回收按钮
+    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.huishou then
+        -- 点击右侧面板回收按钮
         Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.MAIN)
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.QIANBI,
-            iteminfo.lv * base_qianbi * findIndex(QUALITY_ENUM, iteminfo.quality))
+                iteminfo.lv * base_qianbi * findIndex(QUALITY_ENUM, iteminfo.quality))
         Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.TUPOSHI,
-            UIBackpack.ELEMENT_ID.HUISHOU.TUPOSHI_ENUMS[iteminfo.quality])
+                UIBackpack.ELEMENT_ID.HUISHOU.TUPOSHI_ENUMS[iteminfo.quality])
 
         local setXianyu, setQianghuashi = calXianyuQianghuashi(iteminfo.quality)
 
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.XIANYU, tostring(setXianyu))
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.QIANGHUASHI,
-            tostring(setQianghuashi))
-
-    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.huishou_ok then -- 处理回收
+                tostring(setQianghuashi))
+    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.huishou_ok then
+        -- 处理回收
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
 
         local _, xianyu = VarLib2:getPlayerVarByName(uid, 3, "仙玉")
@@ -849,7 +835,7 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         local _, qianghuashi = VarLib2:getPlayerVarByName(uid, 3, "强化石")
 
         VarLib2:setPlayerVarByName(uid, 3, "钱币",
-            qianbi + iteminfo.lv * base_qianbi * findIndex(QUALITY_ENUM, iteminfo.quality))
+                qianbi + iteminfo.lv * base_qianbi * findIndex(QUALITY_ENUM, iteminfo.quality))
 
         local setXianyu, setQianghuashi = calXianyuQianghuashi(iteminfo.quality)
         VarLib2:setPlayerVarByName(uid, 3, "仙玉", xianyu + setXianyu)
@@ -873,27 +859,27 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
             end
         end
         if isExist == false then
-            table.insert(PlayerBackpack[uid]['items'], {TuposhiQualityMap[iteminfo.quality], 1})
+            table.insert(PlayerBackpack[uid]['items'], { TuposhiQualityMap[iteminfo.quality], 1 })
         end
 
         table.remove(PlayerBackpack[uid]['undressed'][UIBackpack.currentSelectMenuType[uid]], findIndex(
-            PlayerBackpack[uid]['undressed'][UIBackpack.currentSelectMenuType[uid]], UIBackpack.currentSelectItemId[uid]))
+                PlayerBackpack[uid]['undressed'][UIBackpack.currentSelectMenuType[uid]], UIBackpack.currentSelectItemId[uid]))
 
         UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
 
         UIBackpack.handlePaginationText(uid)
-
-    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.undress then -- 脱下装备处理
+    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.undress then
+        -- 脱下装备处理
         local currentSelectLeftCell = UIBackpack.currentSelectLeftCell[uid]
         print("UIBackpack.handleAllDetailPanel 脱下装备处理", currentSelectLeftCell)
 
         if string.find(currentSelectLeftCell, "weapon") then
             table.insert(PlayerBackpack[uid]['undressed']['weapon'],
-                PlayerBackpack[uid]['dressed'][currentSelectLeftCell])
+                    PlayerBackpack[uid]['dressed'][currentSelectLeftCell])
             PlayerBackpack[uid]['dressed'][currentSelectLeftCell] = nil
         else
             table.insert(PlayerBackpack[uid]['undressed'][currentSelectLeftCell],
-                PlayerBackpack[uid]['dressed'][currentSelectLeftCell])
+                    PlayerBackpack[uid]['dressed'][currentSelectLeftCell])
             PlayerBackpack[uid]['dressed'][currentSelectLeftCell] = nil
         end
 
@@ -903,8 +889,8 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         PlayerBackpack.calculateAttr(uid)
         UIBackpack.handlePaginationText(uid)
         PlayerBackpack.changWeaponSkin(uid)
-
-    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.dress then -- 穿上装备处理
+    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.dress then
+        -- 穿上装备处理
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
         print("UIBackpack.handleAllDetailPanel 穿上装备处理", iteminfo)
         local _, playerLv = VarLib2:getPlayerVarByName(uid, 3, "等级")
@@ -916,7 +902,7 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         local itemType = UIBackpack.currentSelectMenuType[uid]
 
         local currentSelectItemIdx = findIndex(PlayerBackpack[uid]['undressed'][itemType],
-            UIBackpack.currentSelectItemId[uid])
+                UIBackpack.currentSelectItemId[uid])
 
         if itemType == 'weapon' then
             if PlayerBackpack[uid]['dressed']['weapon1'] == nil then
@@ -937,13 +923,12 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
                         else
                             table.remove(PlayerBackpack[uid]['undressed'][itemType], currentSelectItemIdx)
                             table.insert(PlayerBackpack[uid]['undressed'][itemType],
-                                PlayerBackpack[uid]['dressed']["weapon1"])
+                                    PlayerBackpack[uid]['dressed']["weapon1"])
                             PlayerBackpack[uid]['dressed']["weapon1"] = UIBackpack.currentSelectItemId[uid]
                         end
                     end
                 end
             end
-
         else
             if PlayerBackpack[uid]['dressed'][itemType] == nil then
                 PlayerBackpack[uid]['dressed'][itemType] = UIBackpack.currentSelectItemId[uid]
@@ -969,19 +954,17 @@ end
 ---@param uid number
 ---@---@param uielement string
 function UIBackpack.handleChangeKuaijielan(uid, uielement)
-
     local handleService = function(idx)
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
-        local _, temp_index =
-            Valuegroup:getGroupNoByValue(21, "道具类型组", UIBackpack.currentSelectItemId[uid], 0)
+        local _, temp_index = Valuegroup:getGroupNoByValue(21, "道具类型组", UIBackpack.currentSelectItemId[uid], 0)
         local _, temp_iconid = Valuegroup:getValueNoByName(18, "道具图片组", temp_index, 0)
 
         Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN,
-            UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. idx][1], 100)
+                UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. idx][1], 100)
         Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN,
-            UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. idx][2], 100)
+                UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. idx][2], 100)
         Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN,
-            UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. idx][1], temp_iconid)
+                UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. idx][1], temp_iconid)
 
         local findItemNum = function(itemid)
             for findI, findArr in ipairs(PlayerBackpack[uid].items) do
@@ -992,8 +975,8 @@ function UIBackpack.handleChangeKuaijielan(uid, uielement)
         end
 
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN,
-            UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. idx][2],
-            "" .. findItemNum(UIBackpack.currentSelectItemId[uid]))
+                UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.kuaijiejian["no" .. idx][2],
+                "" .. findItemNum(UIBackpack.currentSelectItemId[uid]))
 
         Valuegroup:setValueNoByName(21, "快捷键道具组", idx, UIBackpack.currentSelectItemId[uid], uid)
         UIBackpack.handleMainKuaijiejian(uid)
@@ -1015,7 +998,6 @@ end
 ---@param event any {eventobjid,CustomUI}
 function UIBackpack.handleShowMain(event)
     if event.CustomUI == UIBackpack.ELEMENT_ID.MAIN then
-
         if UIBackpack.currentSelectMenuType[event.eventobjid] == nil then
             UIBackpack.currentSelectMenuType[event.eventobjid] = 'weapon'
         end
@@ -1040,15 +1022,14 @@ end
 --- 处理分页文本显示
 ---@param uid number 玩家迷你号
 function UIBackpack.handlePaginationText(uid)
-
     local _, bpLimit = VarLib2:getPlayerVarByName(uid, 3, "背包容量")
     local currentBPNum = #PlayerBackpack[uid]['undressed']['weapon'] + #PlayerBackpack[uid]['undressed']['hat'] +
-                             #PlayerBackpack[uid]['undressed']['clothes'] + #PlayerBackpack[uid]['undressed']['shoes'] +
-                             #PlayerBackpack[uid]['undressed']['ring'] + #PlayerBackpack[uid]['undressed']['bracelet'] +
-                             #PlayerBackpack[uid]['undressed']['shield'] + #PlayerBackpack[uid]['items']
+            #PlayerBackpack[uid]['undressed']['clothes'] + #PlayerBackpack[uid]['undressed']['shoes'] +
+            #PlayerBackpack[uid]['undressed']['ring'] + #PlayerBackpack[uid]['undressed']['bracelet'] +
+            #PlayerBackpack[uid]['undressed']['shield'] + #PlayerBackpack[uid]['items']
 
     Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.FEN_YE.TEXT,
-        "物品:" .. currentBPNum .. "/" .. bpLimit)
+            "物品:" .. currentBPNum .. "/" .. bpLimit)
 
     print("UIBackpack.handlePaginationText 开始处理分页" .. currentBPNum .. "/" .. bpLimit)
 end
@@ -1090,7 +1071,7 @@ function UIBackpack.handleSortCells(uid, uielement)
                 return findIndex(QUALITY_ENUM, itemA.quality) > findIndex(QUALITY_ENUM, itemB.quality)
             end
         end)
-
+        print(PlayerBackpack[uid]['undressed'][menuType])
     else
         table.sort(PlayerBackpack[uid]['items'], function(a, b)
             local itemA = ALL_BACKPACK_ITEMS[a[1]]
@@ -1115,26 +1096,23 @@ function UIBackpack.handleMainKuaijiejian(uid)
     local _, kuaijielan_2 = Valuegroup:getValueNoByName(21, "快捷键道具组", 2, uid)
     local _, kuaijielan_3 = Valuegroup:getValueNoByName(21, "快捷键道具组", 3, uid)
     local _, kuaijielan_4 = Valuegroup:getValueNoByName(21, "快捷键道具组", 4, uid)
-    local valuegroupkuaijielans = {kuaijielan_1, kuaijielan_2, kuaijielan_3, kuaijielan_4}
+    local valuegroupkuaijielans = { kuaijielan_1, kuaijielan_2, kuaijielan_3, kuaijielan_4 }
 
     for i, v in ipairs(valuegroupkuaijielans) do
+        print(i, v)
         if v == 101 then
-            Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN_UI, UIBackpack.ELEMENT_ID.MAIN_KUAIJIEJIAN["no" .. i][1],
-                0)
-            Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN_UI, UIBackpack.ELEMENT_ID.MAIN_KUAIJIEJIAN["no" .. i][2],
-                0)
-
+            Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN_UI, UIBackpack.ELEMENT_ID.MAIN_KUAIJIEJIAN["no" .. i][1], 0)
+            Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN_UI, UIBackpack.ELEMENT_ID.MAIN_KUAIJIEJIAN["no" .. i][2], 0)
         else
-
             local _, temp_index = Valuegroup:getGroupNoByValue(21, "道具类型组", v, 0)
             local _, temp_iconid = Valuegroup:getValueNoByName(18, "道具图片组", temp_index, 0)
 
             Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN_UI, UIBackpack.ELEMENT_ID.MAIN_KUAIJIEJIAN["no" .. i][1],
-                100)
+                    100)
             Customui:setAlpha(uid, UIBackpack.ELEMENT_ID.MAIN_UI, UIBackpack.ELEMENT_ID.MAIN_KUAIJIEJIAN["no" .. i][2],
-                100)
-            Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN_UI,
-                UIBackpack.ELEMENT_ID.MAIN_KUAIJIEJIAN["no" .. i][1], temp_iconid)
+                    100)
+            Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN_UI, UIBackpack.ELEMENT_ID.MAIN_KUAIJIEJIAN["no" .. i][1],
+                    temp_iconid)
 
             local findItemNum = function(itemid)
                 for findI, findArr in ipairs(PlayerBackpack[uid].items) do
@@ -1143,9 +1121,9 @@ function UIBackpack.handleMainKuaijiejian(uid)
                     end
                 end
             end
-            
+
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN_UI, UIBackpack.ELEMENT_ID.MAIN_KUAIJIEJIAN["no" .. i][2],
-                "" .. findItemNum(v))
+                    "" .. findItemNum(v))
         end
     end
 end

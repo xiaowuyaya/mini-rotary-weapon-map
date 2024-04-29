@@ -1,7 +1,6 @@
 -- 玩家进入游戏初始化
 function player_enter_game_init(event)
     PlayerBackpack.init(event.eventobjid)
-    
 end
 ScriptSupportEvent:registerEvent('Game.AnyPlayer.EnterGame', player_enter_game_init)
 
@@ -46,7 +45,6 @@ function handle_backpack_ui_click(event)
     UIBackpack.handleChangeKuaijielan(event.eventobjid, event.uielement)
 end
 ScriptSupportEvent:registerEvent('UI.Button.Click', handle_backpack_ui_click)
-
 
 function handle_player_add_buff(event)
     if event.buffid == 50000010 then

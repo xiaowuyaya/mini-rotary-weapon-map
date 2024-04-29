@@ -4,7 +4,6 @@ allPlayerAttr = {}
 -- 各个数量武器旋转角度枚举
 INTERVAL_ANGLE_ENUMS = {0, 91, 90, 11}
 
-
 --- 给玩家添加一个旋转武器
 ---@param uid number 用户编号
 ---@param actorId number 实体ID
@@ -54,6 +53,7 @@ local function playerRotaryWeaponInit(event)
     addPlayerRotryWeapon(event.eventobjid, 2)
     addPlayerRotryWeapon(event.eventobjid, 2)
     addPlayerRotryWeapon(event.eventobjid, 2)
+    PlayerBackpack.changWeaponSkin(event.eventobjid)
 end
 
 ScriptSupportEvent:registerEvent('Game.AnyPlayer.EnterGame', playerRotaryWeaponInit)
@@ -69,7 +69,6 @@ function playerDieHandle(event)
 end
 ScriptSupportEvent:registerEvent('Player.Die', playerDieHandle)
 ScriptSupportEvent:registerEvent('Game.AnyPlayer.LeaveGame', playerDieHandle)
-
 
 --- 旋转实体运行时
 function rotaryWeaponRuntime()
