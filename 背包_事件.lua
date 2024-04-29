@@ -43,6 +43,7 @@ function handle_backpack_ui_click(event)
     UIBackpack.handlePaginationLogic(event.eventobjid, event.uielement)
     UIBackpack.handleSortCells(event.eventobjid, event.uielement)
     UIBackpack.handleChangeKuaijielan(event.eventobjid, event.uielement)
+    UIBackpack.handleHuishouUI(event.eventobjid, event.uielement)
 end
 ScriptSupportEvent:registerEvent('UI.Button.Click', handle_backpack_ui_click)
 
@@ -52,3 +53,4 @@ function handle_player_add_buff(event)
     end
 end
 ScriptSupportEvent:registerEvent('Player.AddBuff', handle_player_add_buff)
+

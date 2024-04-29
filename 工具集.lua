@@ -61,3 +61,20 @@ function isFloat()
         print("这是一个整数")
     end
 end
+
+
+function CopyTableDeep(t)
+    if type(t) ~= "table" then
+        return t
+    end
+
+    local ret = {}
+    for k, v in pairs(t) do
+        if type(v) == "table" then
+            ret[k] = CopyTableDeep(v)
+        else
+            ret[k] = v
+        end
+    end
+    return ret
+end
