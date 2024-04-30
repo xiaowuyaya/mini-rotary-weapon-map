@@ -11,7 +11,7 @@ function player_leave_game(event)
 end
 ScriptSupportEvent:registerEvent('Game.AnyPlayer.LeaveGame', player_leave_game)
 
--- 每30秒保存一次玩家背包数据
+-- 每30秒保存一次玩家背包数据 、 以及排行榜数据
 function loop_time_save_player_backpack(event)
     local current = event.second
     if (current ~= nil and current >= 30 and (current - 30) % 30 == 0) then
@@ -55,3 +55,15 @@ function handle_player_add_buff(event)
 end
 ScriptSupportEvent:registerEvent('Player.AddBuff', handle_player_add_buff)
 
+
+function handle_player_new_input_content(event)
+    if event.content == "清空所有玩家数据1224" then
+        local ret = CloudSever:ClearDataList("backpack")
+        if ret == ErrorCode.OK then
+            print('清空表成功')
+        else
+            print('清空表失败')
+        end
+    end
+end
+ScriptSupportEvent:registerEvent('Player.NewInputContent', handle_player_new_input_content)

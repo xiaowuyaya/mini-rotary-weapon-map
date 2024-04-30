@@ -166,11 +166,7 @@ function PlayerBackpack.calculateAttr(uid)
         if item ~= nil then
             local itemInfo = ALL_BACKPACK_ITEMS[item]
 
-            print(findQianhuaIndex(dressedType))
-
             local _, lv = Valuegroup:getValueNoByName(17, "装备槽强化等级", findQianhuaIndex(dressedType), uid)
-
-            print(lv)
 
             hp = hp + itemInfo['hp'] + itemInfo['hp'] * (lv * 0.01)
             atk = atk + itemInfo['atk'] + itemInfo['atk'] * (lv * 0.01)
@@ -1370,10 +1366,10 @@ end
 ---@param uid number
 ---@param uielement string
 function UIBackpack.handleQianghuaOK(uid, uielement)
-    -- local code = Actor:hasBuff(uid, 50000012)
-    -- if code == 0 then
-    --     return
-    -- end
+    local code = Actor:hasBuff(uid, 50000012)
+    if code == 0 then
+        return
+    end
     if uielement ~= UIBackpack.ELEMENT_ID.QIANGHUA_OK then
         return
     end
@@ -1430,5 +1426,5 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
 
     Valuegroup:setValueNoByName(17, "装备槽突破次数", index, tupocount + 1, uid)
 
-    -- Actor:addBuff(uid, 50000012, 1, 7)
+    Actor:addBuff(uid, 50000012, 1, 7)
 end
