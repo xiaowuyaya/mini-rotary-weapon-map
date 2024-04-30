@@ -84,10 +84,10 @@ RANK_TABLE_ELEMENT_ID = {
 }
 
 function savePlayerRankData(uid)
-    local lv = VarLib2:getPlayerVarByName(uid, 3, "等级")
-    local source = VarLib2:getPlayerVarByName(uid, 3, "玩家评分")
-    local time = VarLib2:getPlayerVarByName(uid, 3, "玩家游戏时长")
-    local xiaofei = VarLib2:getPlayerVarByName(uid, 3, "玩家消费")
+    local _, lv = VarLib2:getPlayerVarByName(uid, 3, "等级")
+    local _, source = VarLib2:getPlayerVarByName(uid, 3, "玩家评分")
+    local _, time = VarLib2:getPlayerVarByName(uid, 3, "玩家游戏时长")
+    local _, xiaofei = VarLib2:getPlayerVarByName(uid, 3, "玩家消费")
     local _, name = Player:getNickname(uid)
     print(uid)
     print(lv)
