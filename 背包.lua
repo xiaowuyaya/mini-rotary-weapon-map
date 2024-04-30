@@ -12,16 +12,16 @@ function PlayerBackpack.init(uid)
     -- 默认背包数据
     local DEFAULT_BACKPACK_DATA = {
         dressed = {
-            weapon1 = nil,
-            weapon2 = nil,
-            weapon3 = nil,
-            weapon4 = nil,
-            hat = nil,
-            clothes = nil,
-            shoes = nil,
-            ring = nil,
-            bracelet = nil,
-            shield = nil
+            weapon1 = 4131,
+            weapon2 = 4131,
+            weapon3 = 4131,
+            weapon4 = 4131,
+            hat = 4126,
+            clothes = 4128,
+            shoes = 4134,
+            ring = 4136,
+            bracelet = 4138,
+            shield = 4144
         },
         undressed = {
             weapon = {4098, 4103, 4130, 4131, 4098, 4103, 4130, 4131, 4098, 4103, 4130, 4131, 4098, 4103, 4130, 4131,
@@ -33,10 +33,7 @@ function PlayerBackpack.init(uid)
             bracelet = {},
             shield = {}
         },
-        items = {{4155, 999}, {4156, 999}, {4157, 1}, {4158, 1}, {4148, 10}, {4149, 10}, {4150, 10}, {4151, 10}},
-        --  {4152, 999}, {4153, 999}, {4154, 999}}
-        --  items = {{4155, 999}, {4156, 999}, {4157, 1}, {4158, 1}, {4148, 999}, {4149, 999}, {4150, 999}, {4151, 999},
-        --  {4152, 999}, {4153, 999}, {4154, 999}}
+        items = {{4148, 999}, {4149, 999}, {4150, 999}, {4151, 999}, {4152, 999}, {4153, 999}, {4154, 999}}
     }
 
     -- 云服获取玩家背包数据回调方法
@@ -1005,9 +1002,9 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         if code == 0 then
             return
         end
-        
+
         Actor:addBuff(uid, 50000012, 1, 7)
-    
+
         Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.BLACK_BG)
         Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.MAIN)
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
@@ -1026,9 +1023,9 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         if code == 0 then
             return
         end
-        
+
         Actor:addBuff(uid, 50000012, 1, 7)
-    
+
         UIBackpack.handleObjectHuishou(uid, UIBackpack.currentSelectItemId[uid])
 
         UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
@@ -1039,9 +1036,9 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         if code == 0 then
             return
         end
-        
+
         Actor:addBuff(uid, 50000012, 1, 7)
-    
+
         local currentSelectLeftCell = UIBackpack.currentSelectLeftCell[uid]
         print("UIBackpack.handleAllDetailPanel 脱下装备处理", currentSelectLeftCell)
 
@@ -1066,9 +1063,9 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         if code == 0 then
             return
         end
-        
+
         Actor:addBuff(uid, 50000012, 1, 7)
-    
+
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
         print("UIBackpack.handleAllDetailPanel 穿上装备处理", iteminfo)
         local _, playerLv = VarLib2:getPlayerVarByName(uid, 3, "等级")
@@ -1348,9 +1345,9 @@ function UIBackpack.handleHuishouUI(uid, uielement)
         if code == 0 then
             return
         end
-        
+
         Actor:addBuff(uid, 50000012, 1, 7)
-    
+
         local tempArr = {}
 
         for idx, itemId in ipairs(PlayerBackpack[uid].undressed[UIBackpack.currentSelectMenuType[uid]]) do
@@ -1382,7 +1379,7 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
     if code == 0 then
         return
     end
-    
+
     Actor:addBuff(uid, 50000012, 1, 7)
 
     if uielement ~= UIBackpack.ELEMENT_ID.QIANGHUA_OK then
@@ -1436,10 +1433,19 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
                 if itemArr[1] == itemid then
                     itemArr[2] = itemArr[2] - needNum
                     if itemArr[2] == 0 then
-                        table.remove(PlayerBackpack[uid].items, i)
+                        PlayerBackpack[uid].items = nil
                     end
                 end
             end
+
+            local newArray = {}
+            for i, itemArr in pairs(PlayerBackpack[uid].items) do
+                if itemArr ~= nil then
+                    table.insert(newArray, itemArr)
+                end
+            end
+
+            PlayerBackpack[uid].items = newArray
         end
     end
 
