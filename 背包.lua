@@ -1376,6 +1376,10 @@ end
 ---@param uid number
 ---@param uielement string
 function UIBackpack.handleQianghuaOK(uid, uielement)
+    if uielement ~= UIBackpack.ELEMENT_ID.QIANGHUA_OK then
+        return
+    end
+
     local code = Actor:hasBuff(uid, 50000012)
     if code == 0 then
         return
@@ -1383,12 +1387,13 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
 
     Actor:addBuff(uid, 50000012, 1, 7)
 
-    if uielement ~= UIBackpack.ELEMENT_ID.QIANGHUA_OK then
-        return
-    end
+    PlayerBackpack.calculateAttr(uid)
+    
     local _, index = Valuegroup:getValueNoByName(17, "ui翻页组", 4, uid)
     local _, lv = Valuegroup:getValueNoByName(17, "装备槽强化等级", index, uid)
     local _, tupocount = Valuegroup:getValueNoByName(17, "装备槽突破次数", index, uid)
+
+    
 
     if lv ~= tupocount * 10 then
         return
@@ -1457,6 +1462,4 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
     Player:notifyGameInfo2Self(uid, "突破成功")
 
     UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
-    PlayerBackpack.calculateAttr(uid)
-
 end
