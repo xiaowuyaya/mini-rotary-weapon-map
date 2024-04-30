@@ -7,6 +7,9 @@ RANK_TABLE_ELEMENT_ID = {
     MY_XIAOFEI = "7359881123757234400_21",
     MY_LV = "7359881123757234400_115",
     MY_SOURCE = "7359881123757234400_116",
+    PREV = "7359881123757234400_89",
+    NEXT = "7359881123757234400_90",
+    PAGE_INFO = "7359881123757234400_88",
     ROW = {{
         RANK = "7359881123757234400_37",
         NAME = "7359881123757234400_38",
@@ -109,7 +112,6 @@ function savePlayerRankData(uid)
     print("loop_time_save_player_backpack: 保存玩家排行榜数据结果", ret)
 end
 
-
 -- 每30秒保存一次玩家背包数据
 function loop_time_save_rank_table(event)
     local current = event.second
@@ -161,11 +163,17 @@ function getRankTableData()
     print("getRankTableData 云服获取排行榜数据结果: ", cloudRet)
 end
 
+current_player_rank_page = {}
+
 function show_rank_ui(event)
     if event.CustomUI ~= RANK_TABLE_ELEMENT_ID.MAIN then
         return
     end
     local uid = event.eventobjid
+
+    if current_player_rank_page[uid] == nil then
+        current_player_rank_page[uid] = {page = 1, total = 0}
+    end
 
     local lv = VarLib2:getPlayerVarByName(uid, 3, "等级")
     local source = VarLib2:getPlayerVarByName(uid, 3, "玩家评分")
@@ -188,31 +196,38 @@ function show_rank_ui(event)
     end
 
     local myIndex = findPlayerIndex(name)
-    print(myIndex)
+
+    current_player_rank_page[uid].total = math.ceil(#RankTableData / 10)
+
     Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.MY_RANK, "我的排名: " .. myIndex)
+    Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.PAGE_INFO,current_player_rank_page[uid].page .. "/" .. current_player_rank_page[uid].total)
 
-    for i, eleObj in pairs(RANK_TABLE_ELEMENT_ID.ROW) do
+    local start = (current_player_rank_page[uid].page - 1) * 10 + 1
+    local end_ = current_player_rank_page[uid].page * 10
+
+    for i = start, end_ do
+        local rowIdx = i - start + 1
         if RankTableData[i] ~= nil then
-            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.RANK, RankTableData[i].index)
-            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.NAME, RankTableData[i].name)
-            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.TIME, RankTableData[i].time)
-            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.XIAOFEI, RankTableData[i].xiaofei)
-            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.LV, RankTableData[i].lv)
-            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.SOURCE, RankTableData[i].source)
+            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].RANK, RankTableData[i].index)
+            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].NAME, RankTableData[i].name)
+            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].TIME, RankTableData[i].time)
+            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].XIAOFEI, RankTableData[i].xiaofei)
+            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].LV, RankTableData[i].lv)
+            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].SOURCE, RankTableData[i].source)
 
-            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.RANK)
-            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.NAME)
-            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.TIME)
-            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.XIAOFEI)
-            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.LV)
-            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.SOURCE)
+            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].RANK)
+            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].NAME)
+            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].TIME)
+            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].XIAOFEI)
+            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].LV)
+            Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].SOURCE)
         else
-            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.RANK)
-            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.NAME)
-            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.TIME)
-            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.XIAOFEI)
-            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.LV)
-            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, eleObj.SOURCE)
+            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].RANK)
+            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].NAME)
+            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].TIME)
+            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].XIAOFEI)
+            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].LV)
+            Customui:hideElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].SOURCE)
         end
     end
 end
@@ -223,3 +238,25 @@ function player_enter_game_init(event)
     getRankTableData()
 end
 ScriptSupportEvent:registerEvent('Game.AnyPlayer.EnterGame', player_enter_game_init)
+
+
+function handle_rank_page_ui_click(event)
+    local uid= event.eventobjid
+    local elementid = event.uielement
+
+    if elementid == RANK_TABLE_ELEMENT_ID.NEXT then
+        current_player_rank_page[uid].page = current_player_rank_page[uid].page + 1
+        if current_player_rank_page[uid].page > current_player_rank_page[uid].total then
+            current_player_rank_page[uid].page = current_player_rank_page[uid].total
+        end
+        show_rank_ui(event)
+        
+    elseif elementid == RANK_TABLE_ELEMENT_ID.PREV then
+        current_player_rank_page[uid].page = current_player_rank_page[uid].page - 1
+        if current_player_rank_page[uid].page < 1 then
+            current_player_rank_page[uid].page = 1
+        end
+        show_rank_ui(event)
+    end
+end
+ScriptSupportEvent:registerEvent('UI.Button.Click', handle_rank_page_ui_click)
