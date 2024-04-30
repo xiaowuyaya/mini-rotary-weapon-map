@@ -1457,5 +1457,6 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
     Player:notifyGameInfo2Self(uid, "突破成功")
 
     UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
+    PlayerBackpack.calculateAttr(uid)
 
 end
