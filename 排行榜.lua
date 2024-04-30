@@ -3,6 +3,8 @@
     等级，玩家评分，玩家游戏时长，玩家消费
  ]]
 
+RankTableData = {}
+
 -- 每30秒保存一次玩家背包数据
 function loop_time_save_rank_table(event)
     local current = event.second
@@ -22,21 +24,31 @@ function loop_time_save_rank_table(event)
                 xiaofei = xiaofei
             }
 
-            local ret = CloudSever:setDataListBykey("rank", "player_" .. uid, data)
+            local ret = CloudSever:setDataListBykey("rank", "data.player_" .. uid, data)
         end
+    end
+
+    if (current ~= nil and current >= 10 and (current - 10) % 10 == 0) then
+        getRankTableData()
     end
 
 end
 ScriptSupportEvent:registerEvent('Game.RunTime', loop_time_save_rank_table)
 
 function getRankTableData()
-    local callback = function(data)
-        if data then
-            for k, v in pairs(data) do
-                print("getRankTableData 云服获取排行榜数据: ", k, v)
+    local callback = function(ret, k, v)
+        if ret == ErrorCode.OK then
+            print("getRankTableData callback 云服获取排行榜数据成功: ", k)
+            RankTableData = CopyTableDeep(v)
+        else
+            print("getRankTableData callback 云服获取排行榜数据失败: ", ret)
+            if ret == 2 then
+                print("getRankTableData callback 不存在k数据", k)
+            else
+                print("getRankTableData callback 云服获取玩家背包数据失败: ", ret)
             end
         end
     end
-    local cloudRet = CloudSever:getDataListByKeyEx('rank', "player_" .. uid, callback)
+    local cloudRet = CloudSever:getDataListByKeyEx('rank', "data", callback)
     print("getRankTableData 云服获取排行榜数据结果: ", cloudRet)
 end

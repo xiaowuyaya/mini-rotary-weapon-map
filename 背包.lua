@@ -1004,6 +1004,9 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         if code == 0 then
             return
         end
+        
+        Actor:addBuff(uid, 50000012, 1, 7)
+    
         Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.MAIN)
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.QIANBI, iteminfo.lv *
@@ -1016,23 +1019,27 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.XIANYU, tostring(setXianyu))
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.QIANGHUASHI,
             tostring(setQianghuashi))
-        Actor:addBuff(uid, 50000012, 1, 7)
     elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.huishou_ok then -- 处理回收
         local code = Actor:hasBuff(uid, 50000012)
         if code == 0 then
             return
         end
+        
+        Actor:addBuff(uid, 50000012, 1, 7)
+    
         UIBackpack.handleObjectHuishou(uid, UIBackpack.currentSelectItemId[uid])
 
         UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
 
         UIBackpack.handlePaginationText(uid)
-        Actor:addBuff(uid, 50000012, 1, 7)
     elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.undress then -- 脱下装备处理
         local code = Actor:hasBuff(uid, 50000012)
         if code == 0 then
             return
         end
+        
+        Actor:addBuff(uid, 50000012, 1, 7)
+    
         local currentSelectLeftCell = UIBackpack.currentSelectLeftCell[uid]
         print("UIBackpack.handleAllDetailPanel 脱下装备处理", currentSelectLeftCell)
 
@@ -1052,12 +1059,14 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         PlayerBackpack.calculateAttr(uid)
         UIBackpack.handlePaginationText(uid)
         PlayerBackpack.changWeaponSkin(uid)
-        Actor:addBuff(uid, 50000012, 1, 7)
     elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.dress then -- 穿上装备处理
         local code = Actor:hasBuff(uid, 50000012)
         if code == 0 then
             return
         end
+        
+        Actor:addBuff(uid, 50000012, 1, 7)
+    
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
         print("UIBackpack.handleAllDetailPanel 穿上装备处理", iteminfo)
         local _, playerLv = VarLib2:getPlayerVarByName(uid, 3, "等级")
@@ -1115,7 +1124,6 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         PlayerBackpack.calculateAttr(uid)
         UIBackpack.handlePaginationText(uid)
         PlayerBackpack.changWeaponSkin(uid)
-        Actor:addBuff(uid, 50000012, 1, 7)
     elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.ok then -- 使用道具
         PlayerBackpack.useItem(uid, UIBackpack.currentSelectItemId[uid])
     end
@@ -1338,6 +1346,9 @@ function UIBackpack.handleHuishouUI(uid, uielement)
         if code == 0 then
             return
         end
+        
+        Actor:addBuff(uid, 50000012, 1, 7)
+    
         local tempArr = {}
 
         for idx, itemId in ipairs(PlayerBackpack[uid].undressed[UIBackpack.currentSelectMenuType[uid]]) do
@@ -1358,7 +1369,6 @@ function UIBackpack.handleHuishouUI(uid, uielement)
         UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
 
         UIBackpack.handlePaginationText(uid)
-        Actor:addBuff(uid, 50000012, 1, 7)
     end
 end
 
@@ -1370,6 +1380,9 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
     if code == 0 then
         return
     end
+    
+    Actor:addBuff(uid, 50000012, 1, 7)
+
     if uielement ~= UIBackpack.ELEMENT_ID.QIANGHUA_OK then
         return
     end
@@ -1425,6 +1438,6 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
     end
 
     Valuegroup:setValueNoByName(17, "装备槽突破次数", index, tupocount + 1, uid)
+    Player:notifyGameInfo2Self(uid, "突破成功")
 
-    Actor:addBuff(uid, 50000012, 1, 7)
 end
