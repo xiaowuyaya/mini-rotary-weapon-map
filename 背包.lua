@@ -33,7 +33,8 @@ function PlayerBackpack.init(uid)
             bracelet = {},
             shield = {}
         },
-        items = {{4148, 999}, {4149, 999}, {4150, 999}, {4151, 999}, {4152, 999}, {4153, 999}, {4154, 999}}
+        items = {{4152, 50}, {4151, 30}, {4149, 20}, {4155, 20}, {4156, 20}, {4157, 20}, {4148, 50}, {4150, 1},
+                 {4153, 999}, {4154, 999}}
     }
 
     -- 云服获取玩家背包数据回调方法
@@ -1431,23 +1432,26 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
         if needNum ~= 0 then
             for i, itemArr in ipairs(PlayerBackpack[uid].items) do
                 if itemArr[1] == itemid then
+
                     itemArr[2] = itemArr[2] - needNum
+
                     if itemArr[2] == 0 then
-                        PlayerBackpack[uid].items[i] = nil
+                        PlayerBackpack[uid].items[i] = "空空如也"
+
                     end
                 end
             end
-
-            local newArray = {}
-            for i, itemArr in ipairs(PlayerBackpack[uid].items) do
-                if itemArr ~= nil then
-                    table.insert(newArray, itemArr)
-                end
-            end
-
-            PlayerBackpack[uid].items = newArray
         end
     end
+
+    local newArray = {}
+    for i, itemArr in ipairs(PlayerBackpack[uid].items) do
+        if itemArr ~= "空空如也" then
+            table.insert(newArray, itemArr)
+        end
+    end
+
+    PlayerBackpack[uid].items = newArray
 
     Valuegroup:setValueNoByName(17, "装备槽突破次数", index, tupocount + 1, uid)
     Player:notifyGameInfo2Self(uid, "突破成功")
