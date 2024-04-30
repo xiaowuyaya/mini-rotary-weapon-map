@@ -33,6 +33,7 @@ end
 function removePlayerRotryWeapon(uid, actorId)
     for i, v in ipairs(allPlayerAttr[uid]['rotaryWeapon']) do
         if v == actorId then
+            Actor:killSelf(actorId)
             table.remove(allPlayerAttr[uid]['rotaryWeapon'], i)
             return
         end
@@ -65,6 +66,7 @@ function playerDieHandle(event)
         local atorId = allPlayerAttr[event.eventobjid]['rotaryWeapon'][i]
         Actor:killSelf(atorId)
     end
+    allPlayerAttr[event.eventobjid]['rotaryWeapon'] = {}
     allPlayerAttr[event.eventobjid] = nil
 end
 ScriptSupportEvent:registerEvent('Player.Die', playerDieHandle)

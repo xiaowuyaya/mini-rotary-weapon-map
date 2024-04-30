@@ -558,7 +558,8 @@ UIBackpack = {
             },
             ok = "7346489952599218400_1125"
         },
-        QIANGHUA_OK = "7346489952599218400_1153"
+        QIANGHUA_OK = "7346489952599218400_1153",
+        BLACK_BG = "7346489952599218400_1106"
     },
     currentSelectMenuType = {}, -- 当前玩家选择的背包导航栏类型 如: {uid: weapon}
     currentSelectItemId = {}, -- 当前玩家选择的背包物品ID 如: {uid: 4148},
@@ -1007,6 +1008,7 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         
         Actor:addBuff(uid, 50000012, 1, 7)
     
+        Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.BLACK_BG)
         Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.MAIN)
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.QIANBI, iteminfo.lv *
@@ -1407,7 +1409,9 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
     for itemid, needNum in pairs(map) do
         if needNum ~= 0 then
             local iteminfo = ALL_BACKPACK_ITEMS[itemid]
+
             local isExist = false
+
             for _, itemArr in ipairs(PlayerBackpack[uid].items) do
                 if itemArr[1] == itemid then
                     isExist = true
@@ -1427,11 +1431,13 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
     end
 
     for itemid, needNum in pairs(map) do
-        for i, itemArr in ipairs(PlayerBackpack[uid].items) do
-            if itemArr[1] == itemid then
-                itemArr[2] = itemArr[2] - needNum
-                if itemArr[2] == 0 then
-                    table.remove(PlayerBackpack[uid].items, i)
+        if needNum ~= 0 then
+            for i, itemArr in ipairs(PlayerBackpack[uid].items) do
+                if itemArr[1] == itemid then
+                    itemArr[2] = itemArr[2] - needNum
+                    if itemArr[2] == 0 then
+                        table.remove(PlayerBackpack[uid].items, i)
+                    end
                 end
             end
         end
@@ -1439,5 +1445,7 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
 
     Valuegroup:setValueNoByName(17, "装备槽突破次数", index, tupocount + 1, uid)
     Player:notifyGameInfo2Self(uid, "突破成功")
+
+    UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
 
 end

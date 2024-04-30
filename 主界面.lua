@@ -14,3 +14,28 @@ function handle_backpack_ui_click(event)
     end
 end
 ScriptSupportEvent:registerEvent('UI.Button.Click', handle_backpack_ui_click)
+
+--- 回城重置武器
+function refresh_player_weapon(event)
+    local uid = event.eventobjid
+    local uielement = event.uielement
+
+    if uielement ~= '7346497485971855584_20' then
+        return
+    end
+
+    for i = 1, #allPlayerAttr[uid]['rotaryWeapon'] do
+        local atorId = allPlayerAttr[uid]['rotaryWeapon'][i]
+        Actor:killSelf(atorId)
+    end
+    allPlayerAttr[uid]['rotaryWeapon'] = {}
+
+    addPlayerRotryWeapon(uid, 2)
+    addPlayerRotryWeapon(uid, 2)
+    addPlayerRotryWeapon(uid, 2)
+    addPlayerRotryWeapon(uid, 2)
+    PlayerBackpack.changWeaponSkin(uid)
+end
+
+ScriptSupportEvent:registerEvent('UI.Button.Click', refresh_player_weapon)
+
