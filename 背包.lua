@@ -1433,7 +1433,7 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
                 if itemArr[1] == itemid then
                     itemArr[2] = itemArr[2] - needNum
                     if itemArr[2] == 0 then
-                        PlayerBackpack[uid].items = nil
+                        PlayerBackpack[uid].items[i] = nil
                     end
                 end
             end
