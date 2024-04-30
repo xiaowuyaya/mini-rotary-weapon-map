@@ -1439,7 +1439,7 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
             end
 
             local newArray = {}
-            for i, itemArr in pairs(PlayerBackpack[uid].items) do
+            for i, itemArr in ipairs(PlayerBackpack[uid].items) do
                 if itemArr ~= nil then
                     table.insert(newArray, itemArr)
                 end
