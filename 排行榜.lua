@@ -115,7 +115,7 @@ end
 -- 每30秒保存一次玩家背包数据
 function loop_time_save_rank_table(event)
     local current = event.second
-    if (current ~= nil and current >= 5 and (current - 5) % 5 == 0) then
+    if (current ~= nil and current >= 60 and (current - 60) % 60 == 0) then
         print("loop_time_save_player_backpack: 开始定时保存玩家排行榜数据")
         for uid, _ in pairs(PlayerBackpack) do
             if type(uid) == 'number' then
@@ -124,7 +124,7 @@ function loop_time_save_rank_table(event)
         end
     end
 
-    if (current ~= nil and current >= 6 and (current - 6) % 6 == 0) then
+    if (current ~= nil and current >= 65 and (current - 65) % 65 == 0) then
         getRankTableData()
     end
 
@@ -175,10 +175,10 @@ function show_rank_ui(event)
         current_player_rank_page[uid] = {page = 1, total = 0}
     end
 
-    local lv = VarLib2:getPlayerVarByName(uid, 3, "等级")
-    local source = VarLib2:getPlayerVarByName(uid, 3, "玩家评分")
-    local time = VarLib2:getPlayerVarByName(uid, 3, "玩家游戏时长")
-    local xiaofei = VarLib2:getPlayerVarByName(uid, 3, "玩家消费")
+    local _, lv = VarLib2:getPlayerVarByName(uid, 3, "等级")
+    local _, source = VarLib2:getPlayerVarByName(uid, 3, "玩家评分")
+    local _, time = VarLib2:getPlayerVarByName(uid, 3, "玩家游戏时长")
+    local _, xiaofei = VarLib2:getPlayerVarByName(uid, 3, "玩家消费")
     local _, name = Player:getNickname(uid)
 
     Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.MY_LV, "等级: " .. lv)
