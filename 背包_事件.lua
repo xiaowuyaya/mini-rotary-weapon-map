@@ -44,6 +44,7 @@ function handle_backpack_ui_click(event)
     UIBackpack.handleSortCells(event.eventobjid, event.uielement)
     UIBackpack.handleChangeKuaijielan(event.eventobjid, event.uielement)
     UIBackpack.handleHuishouUI(event.eventobjid, event.uielement)
+    UIBackpack.handleQianghuaOK(event.eventobjid, event.uielement)
 end
 ScriptSupportEvent:registerEvent('UI.Button.Click', handle_backpack_ui_click)
 

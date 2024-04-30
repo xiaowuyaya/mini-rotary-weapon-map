@@ -33,7 +33,10 @@ function PlayerBackpack.init(uid)
             bracelet = {},
             shield = {}
         },
-        items = {{4155, 999}, {4156, 999}, {4157, 1}, {4158, 1}}
+        items = {{4155, 999}, {4156, 999}, {4157, 1}, {4158, 1}, {4148, 10}, {4149, 10}, {4150, 10}, {4151, 10}},
+        --  {4152, 999}, {4153, 999}, {4154, 999}}
+        --  items = {{4155, 999}, {4156, 999}, {4157, 1}, {4158, 1}, {4148, 999}, {4149, 999}, {4150, 999}, {4151, 999},
+        --  {4152, 999}, {4153, 999}, {4154, 999}}
     }
 
     -- 云服获取玩家背包数据回调方法
@@ -89,13 +92,29 @@ function PlayerBackpack.addObject(uid, itemid)
 
     Backpack:clearAllPack(uid) -- 清空玩家游戏默认背包数据
 
-    if currentBPNum + 1 > bpLimit then
-        print("PlayerBackpack.addObject 背包已满: ", uid)
-        Player:notifyGameInfo2Self(uid, "你的背包容量已满，请及时清理背包")
-        return
-    end
-
     local iteminfo = ALL_BACKPACK_ITEMS[itemid]
+
+    if (iteminfo.type == '消耗品' or iteminfo.type == '材料') == false then
+        if currentBPNum + 1 > bpLimit then
+            print("PlayerBackpack.addObject 背包已满: ", uid)
+            Player:notifyGameInfo2Self(uid, "你的背包容量已满，请及时清理背包")
+            return
+        end
+
+    else
+        local isExist = false
+        for ti, tarr in ipairs(PlayerBackpack[uid].items) do
+            if tarr[1] == itemid then
+                isExist = true
+            end
+        end
+
+        if isExist == false and currentBPNum + 1 > bpLimit then
+            print("PlayerBackpack.addObject 背包已满: ", uid)
+            Player:notifyGameInfo2Self(uid, "你的背包容量已满，请及时清理背包")
+            return
+        end
+    end
 
     if iteminfo.type == '消耗品' or iteminfo.type == '材料' then
         local isExist = false
@@ -108,7 +127,6 @@ function PlayerBackpack.addObject(uid, itemid)
         if isExist == false then
             table.insert(PlayerBackpack[uid].items, {itemid, 1})
         end
-
 
     else
         table.insert(PlayerBackpack[uid]["undressed"][ITEM_TYPE_ENUMS[iteminfo.type]], itemid)
@@ -136,12 +154,26 @@ function PlayerBackpack.calculateAttr(uid)
     local smzbfb = VarLib2:getPlayerVarByName(uid, 3, "生命值百分比")
     local smzhfbfb = VarLib2:getPlayerVarByName(uid, 3, "生命恢复百分比")
 
-    for _, item in pairs(PlayerBackpack[uid]['dressed']) do
+    local function findQianhuaIndex(itemType)
+        for _, v in pairs(UIBackpack.ELEMENT_ID.LEFT_CELLS) do
+            if v.type == itemType then
+                return v.index
+            end
+        end
+    end
+
+    for dressedType, item in pairs(PlayerBackpack[uid]['dressed']) do
         if item ~= nil then
             local itemInfo = ALL_BACKPACK_ITEMS[item]
 
-            hp = hp + itemInfo['hp']
-            atk = atk + itemInfo['atk']
+            print(findQianhuaIndex(dressedType))
+
+            local _, lv = Valuegroup:getValueNoByName(17, "装备槽强化等级", findQianhuaIndex(dressedType), uid)
+
+            print(lv)
+
+            hp = hp + itemInfo['hp'] + itemInfo['hp'] * (lv * 0.01)
+            atk = atk + itemInfo['atk'] + itemInfo['atk'] * (lv * 0.01)
 
             if itemInfo['otherAttr'] ~= nil then
                 for _, v in ipairs(itemInfo['otherAttr']) do
@@ -319,6 +351,7 @@ UIBackpack = {
             -- 帽子
             ["7346489952599218400_32"] = {
                 type = 'hat',
+                index = 3,
                 bg = "7346489952599218400_32",
                 icon = "7346489952599218400_34",
                 addNum = '7346489952599218400_584',
@@ -329,6 +362,7 @@ UIBackpack = {
             -- 衣服
             ["7346489952599218400_26"] = {
                 type = 'clothes',
+                index = 2,
                 bg = "7346489952599218400_26",
                 icon = "7346489952599218400_28",
                 addNum = '7346489952599218400_606',
@@ -339,6 +373,7 @@ UIBackpack = {
             -- 鞋子
             ["7346489952599218400_40"] = {
                 type = 'shoes',
+                index = 1,
                 bg = "7346489952599218400_40",
                 icon = "7346489952599218400_42",
                 addNum = '7346489952599218400_609',
@@ -349,6 +384,7 @@ UIBackpack = {
             -- 武器槽1
             ["7346489952599218400_23"] = {
                 type = 'weapon1',
+                index = 4,
                 bg = "7346489952599218400_23",
                 icon = "7346489952599218400_25",
                 addNum = '7346489952599218400_590',
@@ -359,6 +395,7 @@ UIBackpack = {
             -- 武器槽2
             ["7346489952599218400_523"] = {
                 type = 'weapon2',
+                index = 5,
                 bg = "7346489952599218400_523",
                 icon = "7346489952599218400_525",
                 addNum = '7346489952599218400_593',
@@ -369,6 +406,7 @@ UIBackpack = {
             -- 武器槽3
             ["7346489952599218400_526"] = {
                 type = 'weapon3',
+                index = 6,
                 bg = "7346489952599218400_526",
                 icon = "7346489952599218400_528",
                 addNum = '7346489952599218400_596',
@@ -379,6 +417,7 @@ UIBackpack = {
             -- 武器槽4
             ["7346489952599218400_529"] = {
                 type = 'weapon4',
+                index = 7,
                 bg = "7346489952599218400_529",
                 icon = "7346489952599218400_531",
                 addNum = '7346489952599218400_599',
@@ -389,6 +428,7 @@ UIBackpack = {
             -- 戒指
             ["7346489952599218400_536"] = {
                 type = 'ring',
+                index = 8,
                 bg = "7346489952599218400_536",
                 icon = "7346489952599218400_538",
                 addNum = '7346489952599218400_603',
@@ -399,6 +439,7 @@ UIBackpack = {
             -- 护腕
             ["7346489952599218400_532"] = {
                 type = 'bracelet',
+                index = 9,
                 bg = "7346489952599218400_532",
                 icon = "7346489952599218400_534",
                 addNum = '7346489952599218400_612',
@@ -409,6 +450,7 @@ UIBackpack = {
             -- 盾牌
             ["7346489952599218400_539"] = {
                 type = 'shield',
+                index = 10,
                 bg = "7346489952599218400_539",
                 icon = "7346489952599218400_541",
                 addNum = '7346489952599218400_615',
@@ -519,7 +561,8 @@ UIBackpack = {
                 ["传说"] = {"7346489952599218400_1146", "7346489952599218400_1147"}
             },
             ok = "7346489952599218400_1125"
-        }
+        },
+        QIANGHUA_OK = "7346489952599218400_1153"
     },
     currentSelectMenuType = {}, -- 当前玩家选择的背包导航栏类型 如: {uid: weapon}
     currentSelectItemId = {}, -- 当前玩家选择的背包物品ID 如: {uid: 4148},
@@ -622,7 +665,10 @@ function UIBackpack.handleShowAllLeftCell(uid)
         if playerDressedItemId ~= nil then
             local itemInfo = ALL_BACKPACK_ITEMS[playerDressedItemId]
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem['addNumBg'])
-            Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem["addNum"], "+0")
+
+            local _, qianghuadengji = Valuegroup:getValueNoByName(17, "装备槽强化等级", uiItem.index, uid)
+
+            Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem["addNum"], "+" .. qianghuadengji)
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, uiItem["lv"], 'Lv' .. itemInfo['lv'])
 
             local _, index = Valuegroup:getGroupNoByValue(21, "道具类型组", playerDressedItemId, 0)
@@ -893,8 +939,15 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
                 "+" .. iteminfo['atk'])
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.hp,
                 "+" .. iteminfo['hp'])
-            Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.qianghua1, "+0")
-            Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.qianghua2, "+0")
+
+            local _, lv = Valuegroup:getValueNoByName(17, "装备槽强化等级",
+                UIBackpack.ELEMENT_ID.LEFT_CELLS[uielement].index, uid)
+
+            Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.qianghua1,
+                "+" .. math.floor(iteminfo.atk * lv * 0.01))
+            Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.qianghua2,
+                "+" .. math.floor(iteminfo.hp * lv * 0.01))
+
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.panel_bg,
                 UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][2])
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.icon_bg,
@@ -951,6 +1004,10 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.panel)
         Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.panel)
     elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.huishou then -- 点击右侧面板回收按钮
+        local code = Actor:hasBuff(uid, 50000012)
+        if code == 0 then
+            return
+        end
         Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.MAIN)
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.QIANBI, iteminfo.lv *
@@ -963,15 +1020,23 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.XIANYU, tostring(setXianyu))
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.QIANGHUASHI,
             tostring(setQianghuashi))
-
+        Actor:addBuff(uid, 50000012, 1, 7)
     elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.huishou_ok then -- 处理回收
+        local code = Actor:hasBuff(uid, 50000012)
+        if code == 0 then
+            return
+        end
         UIBackpack.handleObjectHuishou(uid, UIBackpack.currentSelectItemId[uid])
 
         UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
 
         UIBackpack.handlePaginationText(uid)
-
+        Actor:addBuff(uid, 50000012, 1, 7)
     elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.undress then -- 脱下装备处理
+        local code = Actor:hasBuff(uid, 50000012)
+        if code == 0 then
+            return
+        end
         local currentSelectLeftCell = UIBackpack.currentSelectLeftCell[uid]
         print("UIBackpack.handleAllDetailPanel 脱下装备处理", currentSelectLeftCell)
 
@@ -991,8 +1056,12 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         PlayerBackpack.calculateAttr(uid)
         UIBackpack.handlePaginationText(uid)
         PlayerBackpack.changWeaponSkin(uid)
-
+        Actor:addBuff(uid, 50000012, 1, 7)
     elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.dress then -- 穿上装备处理
+        local code = Actor:hasBuff(uid, 50000012)
+        if code == 0 then
+            return
+        end
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
         print("UIBackpack.handleAllDetailPanel 穿上装备处理", iteminfo)
         local _, playerLv = VarLib2:getPlayerVarByName(uid, 3, "等级")
@@ -1050,7 +1119,8 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         PlayerBackpack.calculateAttr(uid)
         UIBackpack.handlePaginationText(uid)
         PlayerBackpack.changWeaponSkin(uid)
-    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.ok then
+        Actor:addBuff(uid, 50000012, 1, 7)
+    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.ok then -- 使用道具
         PlayerBackpack.useItem(uid, UIBackpack.currentSelectItemId[uid])
     end
 end
@@ -1268,6 +1338,10 @@ function UIBackpack.handleHuishouUI(uid, uielement)
     end
 
     if uielement == UIBackpack.ELEMENT_ID.HUISHOU_UI.ok then
+        local code = Actor:hasBuff(uid, 50000012)
+        if code == 0 then
+            return
+        end
         local tempArr = {}
 
         for idx, itemId in ipairs(PlayerBackpack[uid].undressed[UIBackpack.currentSelectMenuType[uid]]) do
@@ -1288,6 +1362,73 @@ function UIBackpack.handleHuishouUI(uid, uielement)
         UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
 
         UIBackpack.handlePaginationText(uid)
-
+        Actor:addBuff(uid, 50000012, 1, 7)
     end
+end
+
+--- 处理强化槽
+---@param uid number
+---@param uielement string
+function UIBackpack.handleQianghuaOK(uid, uielement)
+    -- local code = Actor:hasBuff(uid, 50000012)
+    -- if code == 0 then
+    --     return
+    -- end
+    if uielement ~= UIBackpack.ELEMENT_ID.QIANGHUA_OK then
+        return
+    end
+    local _, index = Valuegroup:getValueNoByName(17, "ui翻页组", 4, uid)
+    local _, lv = Valuegroup:getValueNoByName(17, "装备槽强化等级", index, uid)
+    local _, tupocount = Valuegroup:getValueNoByName(17, "装备槽突破次数", index, uid)
+
+    if lv ~= tupocount * 10 then
+        return
+    end
+
+    local map = {
+        [4148] = 1 * lv,
+        [4149] = 0.5 * lv,
+        [4150] = 0.1 * lv,
+        [4151] = math.floor(0.04 * lv),
+        [4152] = math.floor(0.02 * lv),
+        [4153] = math.floor(0.01 * lv),
+        [4154] = math.floor(0.005 * lv)
+    }
+
+    for itemid, needNum in pairs(map) do
+        if needNum ~= 0 then
+            local iteminfo = ALL_BACKPACK_ITEMS[itemid]
+            local isExist = false
+            for _, itemArr in ipairs(PlayerBackpack[uid].items) do
+                if itemArr[1] == itemid then
+                    isExist = true
+
+                    if itemArr[2] < needNum then
+                        Player:notifyGameInfo2Self(uid, "突破石材料不足")
+                        return
+                    end
+                end
+            end
+
+            if isExist == false then
+                Player:notifyGameInfo2Self(uid, "突破石材料不足")
+                return
+            end
+        end
+    end
+
+    for itemid, needNum in pairs(map) do
+        for i, itemArr in ipairs(PlayerBackpack[uid].items) do
+            if itemArr[1] == itemid then
+                itemArr[2] = itemArr[2] - needNum
+                if itemArr[2] == 0 then
+                    table.remove(PlayerBackpack[uid].items, i)
+                end
+            end
+        end
+    end
+
+    Valuegroup:setValueNoByName(17, "装备槽突破次数", index, tupocount + 1, uid)
+
+    -- Actor:addBuff(uid, 50000012, 1, 7)
 end
