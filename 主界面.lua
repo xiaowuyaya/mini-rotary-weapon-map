@@ -24,6 +24,13 @@ function refresh_player_weapon(event)
         return
     end
 
+    local code = Actor:hasBuff(uid, 50000017)
+    if code == 0 then
+        return
+    end
+    
+    Actor:addBuff(uid, 50000017, 1, 24 * 60)
+
     for i = 1, #allPlayerAttr[uid]['rotaryWeapon'] do
         local atorId = allPlayerAttr[uid]['rotaryWeapon'][i]
         Actor:killSelf(atorId)
