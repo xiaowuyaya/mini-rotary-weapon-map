@@ -291,6 +291,25 @@ function PlayerBackpack.useItem(uid, itemid)
                         math.floor(ticks / 24) .. "秒")
                     return
                 end
+            elseif ALL_BACKPACK_ITEMS[itemid].effect == 'hp%' then -- 生命药水恢复处理
+                local code = Actor:hasBuff(uid, 50000014)
+                if code ~= 0 then
+                    local _, playerMaxHP = Actor:getMaxHP(uid)
+                    local addHP = playerMaxHP * ALL_BACKPACK_ITEMS[itemid].value / 100
+
+                    Actor:addHP(uid, addHP)
+                    Actor:addBuff(uid, 50000014, 1, 30 * 24)
+                    Actor:playBodyEffectById(uid, 1150, 1)
+
+                    Player:notifyGameInfo2Self(uid, "#W道具使用成功，恢复#G" .. addHP .. "HP")
+                    print("PlayerBackpack.useItem 使用道具恢复生命值: ", uid, itemid, addHP)
+
+                else
+                    local _, ticks = Actor:getBuffLeftTick(uid, 50000014)
+                    Player:notifyGameInfo2Self(uid, "药水使用仍在CD冷却中, 剩余时间: " ..
+                        math.floor(ticks / 24) .. "秒")
+                    return
+                end
 
             elseif ALL_BACKPACK_ITEMS[itemid].effect == 'exp' then -- 经验收益
                 local _, buffIDImgs = Valuegroup:getAllGroupItem(18, '状态ID图片', uid)
