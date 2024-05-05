@@ -1,3 +1,4 @@
+
 -- 玩家进入游戏初始化
 function player_enter_game_init(event)
     PlayerBackpack.init(event.eventobjid)

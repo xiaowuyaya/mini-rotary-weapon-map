@@ -32,8 +32,8 @@ local function rotryWeaponCollideHandle(event)
 
                 local r = math.random() * 100
 
-                if r <= playBaojilv then
-                    damage = damage * (1 + playBaojiDamage)
+                if r <= (playBaojilv * 100)then
+                    damage = damage * playBaojiDamage
                 end
 
                 Actor:playerHurt(playerId, event.toobjid, math.floor(damage), 1)
@@ -47,8 +47,8 @@ local function rotryWeaponCollideHandle(event)
 
                 local r = math.random() * 100
 
-                if r <= playBaojilv then
-                    damage = damage * (1 + playBaojiDamage)
+                if r <= (playBaojilv * 100) then
+                    damage = damage *  playBaojiDamage
                 end
 
                 Actor:playerHurt(playerId, event.toobjid, math.floor(damage), 1)

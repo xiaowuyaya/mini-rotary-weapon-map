@@ -1,5 +1,5 @@
 -- 迷你云服背包表明
-MINI_CLOUD_TABLE = "backpack"
+MINI_CLOUD_TABLE = "backpack123"
 
 -- 当前房间所有玩家的背包数据 例: { uid: { dressed: {}, undressed: {}, items: {} }
 PlayerBackpack = {}
@@ -12,20 +12,19 @@ function PlayerBackpack.init(uid)
     -- 默认背包数据
     local DEFAULT_BACKPACK_DATA = {
         dressed = {
-            weapon1 = 4131,
-            weapon2 = 4131,
-            weapon3 = 4131,
-            weapon4 = 4131,
-            hat = 4126,
-            clothes = 4128,
-            shoes = 4134,
-            ring = 4136,
-            bracelet = 4138,
-            shield = 4144
+            weapon1 = nil,
+            weapon2 = nil,
+            weapon3 = nil,
+            weapon4 = nil,
+            hat = nil,
+            clothes = nil,
+            shoes = nil,
+            ring = nil,
+            bracelet = nil,
+            shield = nil
         },
         undressed = {
-            weapon = {4098, 4103, 4130, 4131, 4098, 4103, 4130, 4131, 4098, 4103, 4130, 4131, 4098, 4103, 4130, 4131,
-                      4098, 4103, 4130, 4131},
+            weapon = {},
             hat = {},
             clothes = {},
             shoes = {},
@@ -33,9 +32,11 @@ function PlayerBackpack.init(uid)
             bracelet = {},
             shield = {}
         },
-        items = {{4152, 50}, {4151, 30}, {4149, 20}, {4155, 20}, {4156, 20}, {4157, 20}, {4148, 50}, {4150, 1},
-                 {4153, 999}, {4154, 999}}
+        items = {}
     }
+    --  {4152, 999}, {4153, 999}, {4154, 999}}
+    --  items = {{4155, 999}, {4156, 999}, {4157, 1}, {4158, 1}, {4148, 999}, {4149, 999}, {4150, 999}, {4151, 999},
+    --  {4152, 999}, {4153, 999}, {4154, 999}}
 
     -- 云服获取玩家背包数据回调方法
     local callback = function(ret, k, v)
@@ -49,6 +50,9 @@ function PlayerBackpack.init(uid)
                 print("PlayerBackpack.init callback 不存在k数据", k)
             else
                 print("PlayerBackpack.init callback 云服获取玩家背包数据失败: ", ret)
+                Player:notifyGameInfo2Self(uid,
+                    "存档获取失败，请退出房间后重新进入！当前游玩存档将不保存")
+                PlayerBackpack[uid].FAIL_SERVER_DATA = true
             end
         end
 
@@ -68,6 +72,11 @@ function PlayerBackpack.save(uid)
     print("PlayerBackpack.save 云服保存玩家背包数据 ", uid)
     -- local ret = CloudSever:removeDataListByKey(MINI_CLOUD_TABLE, "player_" .. uid)
     -- print("删除玩家数据重新赋值", ret)
+    if PlayerBackpack[uid].FAIL_SERVER_DATA ~= nil then
+        print("PlayerBackpack.save 玩家数据为获取失败的临时数据，不上传" .. uid)
+        return
+    end
+
     local ret = CloudSever:setDataListBykey(MINI_CLOUD_TABLE, "player_" .. uid, PlayerBackpack[uid])
     print("PlayerBackpack.save 云服保存玩家背包数据结果: ", ret)
 end
@@ -282,6 +291,33 @@ function PlayerBackpack.useItem(uid, itemid)
                         math.floor(ticks / 24) .. "秒")
                     return
                 end
+
+            elseif ALL_BACKPACK_ITEMS[itemid].effect == 'exp' then -- 经验收益
+                local _, buffIDImgs = Valuegroup:getAllGroupItem(18, '状态ID图片', uid)
+                -- local _ ,  buffTIM =Valuegroup:getAllGroupItem(17, 'BUFF时间组', uid)
+
+                local findIndexInBuffIdImgs = function()
+                    for i, buffIdImgArrItemid in ipairs(buffIDImgs) do
+                        if ALL_BACKPACK_ITEMS[buffIdImgArrItemid].effect == 'exp' then
+                            return i
+                        end
+                    end
+
+                    return nil
+                end
+
+                local itemIdx = findIndexInBuffIdImgs() -- 找到的exp类型道具索引
+                print("PlayerBackpack.useItem 使用经验收益道具: ", itemid, itemIdx)
+                print(buffIDImgs)
+                if itemIdx == nil then
+                    Valuegroup:setValueNoByName(18, '状态ID图片', #buffIDImgs + 1, itemid, uid)
+                    Valuegroup:setValueNoByName(17, 'BUFF时间组', #buffIDImgs + 1, ALL_BACKPACK_ITEMS[itemid].value,
+                        uid)
+                else
+                    Valuegroup:setValueNoByName(18, '状态ID图片', itemIdx, itemid, uid)
+                    Valuegroup:setValueNoByName(17, 'BUFF时间组', itemIdx, ALL_BACKPACK_ITEMS[itemid].value, uid)
+                end
+
             end
 
             -- 移除道具数量
@@ -561,6 +597,7 @@ UIBackpack = {
     },
     currentSelectMenuType = {}, -- 当前玩家选择的背包导航栏类型 如: {uid: weapon}
     currentSelectItemId = {}, -- 当前玩家选择的背包物品ID 如: {uid: 4148},
+    currentSelectLeftItemId = {},
     currentSelectLeftCell = {}, -- 当前玩家选择的背包左侧单元格 如: {uid: weapon1}
     page = {}, -- 当前玩家背包分页信息 { uid: {current: 1, total: 10} }
     cureentSelectHuishouTypes = {} -- 当前玩家选择的回收类型 {uid: {普通}}
@@ -573,6 +610,12 @@ function UIBackpack.handleNavMenusChange(uid, uielement)
     if UIBackpack.ELEMENT_ID.RIGHT_NAV_MENUS[uielement] == nil then
         return
     end
+    local code = Actor:hasBuff(uid, 50000012)
+    if code == 0 then
+        return
+    end
+
+    Actor:addBuff(uid, 50000012, 1, 7)
 
     for eleId, arr in pairs(UIBackpack.ELEMENT_ID.RIGHT_NAV_MENUS) do
         if eleId ~= uielement then
@@ -775,7 +818,16 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         UIBackpack.currentSelectItemId[uid] = currentSelectItemId
         local iteminfo = ALL_BACKPACK_ITEMS[currentSelectItemId]
 
+        Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.tran)
+        Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.panel)
+
         if UIBackpack.currentSelectMenuType[uid] ~= "items" then -- 显示装备面板
+            local code = Actor:hasBuff(uid, 50000012)
+            if code == 0 then
+                return
+            end
+
+            Actor:addBuff(uid, 50000012, 1, 7)
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.panel)
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.tran)
 
@@ -838,7 +890,6 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         else -- 显示道具面板
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.panel)
             Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.tran)
-
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.panel_title,
                 iteminfo.name)
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.type,
@@ -918,8 +969,12 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
 
         UIBackpack.currentSelectLeftCell[uid] = selectType
 
+        Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.panel)
+        Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.tran)
+        Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.panel)
+
         if currentSelectItemId ~= nil then
-            UIBackpack.currentSelectItemId[uid] = currentSelectItemId
+            UIBackpack.currentSelectLeftItemId[uid] = currentSelectItemId
             local iteminfo = ALL_BACKPACK_ITEMS[currentSelectItemId]
 
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.panel_title,
@@ -1388,12 +1443,10 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
     Actor:addBuff(uid, 50000012, 1, 7)
 
     PlayerBackpack.calculateAttr(uid)
-    
+
     local _, index = Valuegroup:getValueNoByName(17, "ui翻页组", 4, uid)
     local _, lv = Valuegroup:getValueNoByName(17, "装备槽强化等级", index, uid)
     local _, tupocount = Valuegroup:getValueNoByName(17, "装备槽突破次数", index, uid)
-
-    
 
     if lv ~= tupocount * 10 then
         return

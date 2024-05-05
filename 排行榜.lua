@@ -7,8 +7,8 @@ RANK_TABLE_ELEMENT_ID = {
     MY_XIAOFEI = "7359881123757234400_21",
     MY_LV = "7359881123757234400_115",
     MY_SOURCE = "7359881123757234400_116",
-    PREV = "7359881123757234400_89",
-    NEXT = "7359881123757234400_90",
+    PREV = "7359881123757234400_90",
+    NEXT = "7359881123757234400_89",
     PAGE_INFO = "7359881123757234400_88",
     ROW = {{
         RANK = "7359881123757234400_37",
@@ -234,7 +234,6 @@ end
 ScriptSupportEvent:registerEvent('UI.Show', show_rank_ui)
 
 function player_enter_game_init(event)
-    savePlayerRankData(event.eventobjid)
     getRankTableData()
 end
 ScriptSupportEvent:registerEvent('Game.AnyPlayer.EnterGame', player_enter_game_init)
