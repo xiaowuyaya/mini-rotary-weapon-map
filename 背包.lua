@@ -292,49 +292,56 @@ function PlayerBackpack.useItem(uid, itemid)
                     return
                 end
             elseif ALL_BACKPACK_ITEMS[itemid].effect == 'hp%' then -- 生命药水恢复处理
-                local code = Actor:hasBuff(uid, 50000014)
+                local code = Actor:hasBuff(uid, 50000019)
                 if code ~= 0 then
                     local _, playerMaxHP = Actor:getMaxHP(uid)
-                    local addHP = playerMaxHP * ALL_BACKPACK_ITEMS[itemid].value / 100
+                    local addHP = math.floor(playerMaxHP * ALL_BACKPACK_ITEMS[itemid].value / 100)
 
                     Actor:addHP(uid, addHP)
-                    Actor:addBuff(uid, 50000014, 1, 30 * 24)
+                    Actor:addBuff(uid, 50000019, 1, 30 * 24)
                     Actor:playBodyEffectById(uid, 1150, 1)
 
                     Player:notifyGameInfo2Self(uid, "#W道具使用成功，恢复#G" .. addHP .. "HP")
                     print("PlayerBackpack.useItem 使用道具恢复生命值: ", uid, itemid, addHP)
 
                 else
-                    local _, ticks = Actor:getBuffLeftTick(uid, 50000014)
+                    local _, ticks = Actor:getBuffLeftTick(uid, 50000019)
                     Player:notifyGameInfo2Self(uid, "药水使用仍在CD冷却中, 剩余时间: " ..
                         math.floor(ticks / 24) .. "秒")
                     return
                 end
 
             elseif ALL_BACKPACK_ITEMS[itemid].effect == 'exp' then -- 经验收益
-                local _, buffIDImgs = Valuegroup:getAllGroupItem(18, '状态ID图片', uid)
-                -- local _ ,  buffTIM =Valuegroup:getAllGroupItem(17, 'BUFF时间组', uid)
-
-                local findIndexInBuffIdImgs = function()
-                    for i, buffIdImgArrItemid in ipairs(buffIDImgs) do
-                        if ALL_BACKPACK_ITEMS[buffIdImgArrItemid].effect == 'exp' then
-                            return i
+                local code = Actor:hasBuff(uid, 5000020)
+                if code ~= 0 then
+                    local _, buffIDImgs = Valuegroup:getAllGroupItem(18, '状态ID图片', uid)
+                    local findIndexInBuffIdImgs = function()
+                        for i, buffIdImgArrItemid in ipairs(buffIDImgs) do
+                            if ALL_BACKPACK_ITEMS[buffIdImgArrItemid].effect == 'exp' then
+                                return i
+                            end
                         end
+
+                        return nil
+                    end
+                    local itemIdx = findIndexInBuffIdImgs() -- 找到的exp类型道具索引
+                    print("PlayerBackpack.useItem 使用经验收益道具: ", itemid, itemIdx)
+                    if itemIdx == nil then
+                        Valuegroup:setValueNoByName(18, '状态ID图片', #buffIDImgs + 1, itemid, uid)
+                        Valuegroup:setValueNoByName(17, 'BUFF时间组', #buffIDImgs + 1,
+                            ALL_BACKPACK_ITEMS[itemid].value, uid)
+                    else
+                        Valuegroup:setValueNoByName(18, '状态ID图片', itemIdx, itemid, uid)
+                        Valuegroup:setValueNoByName(17, 'BUFF时间组', itemIdx, ALL_BACKPACK_ITEMS[itemid].value, uid)
                     end
 
-                    return nil
-                end
+                    Actor:addBuff(uid, 5000020, 1, 15 * 24)
 
-                local itemIdx = findIndexInBuffIdImgs() -- 找到的exp类型道具索引
-                print("PlayerBackpack.useItem 使用经验收益道具: ", itemid, itemIdx)
-                print(buffIDImgs)
-                if itemIdx == nil then
-                    Valuegroup:setValueNoByName(18, '状态ID图片', #buffIDImgs + 1, itemid, uid)
-                    Valuegroup:setValueNoByName(17, 'BUFF时间组', #buffIDImgs + 1, ALL_BACKPACK_ITEMS[itemid].value,
-                        uid)
                 else
-                    Valuegroup:setValueNoByName(18, '状态ID图片', itemIdx, itemid, uid)
-                    Valuegroup:setValueNoByName(17, 'BUFF时间组', itemIdx, ALL_BACKPACK_ITEMS[itemid].value, uid)
+                    local _, ticks = Actor:getBuffLeftTick(uid, 5000020)
+                    Player:notifyGameInfo2Self(uid, "药水使用仍在CD冷却中, 剩余时间: " ..
+                        math.floor(ticks / 24) .. "秒")
+                    return
                 end
 
             end
