@@ -88,7 +88,7 @@ function handle_player_add_buff(event)
 
         if iteminfo.otherEffect ~= nil then
             Customui:setText(uid, TUJIAN_ELEMENT.main, TUJIAN_ELEMENT.right.other_effect,
-                ITEMS_OTHER_ATTRS[iteminfo.otherEffect[1]])
+                string.gsub(ITEMS_OTHER_ATTRS[iteminfo.otherEffect[1]], 'XX', iteminfo.otherEffect[2]))
         else
             Customui:setText(uid, TUJIAN_ELEMENT.main, TUJIAN_ELEMENT.right.other_effect, "")
         end
