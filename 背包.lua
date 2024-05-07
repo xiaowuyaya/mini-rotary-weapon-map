@@ -12,7 +12,7 @@ function PlayerBackpack.init(uid)
     -- 默认背包数据
     local DEFAULT_BACKPACK_DATA = {
         dressed = {
-            weapon1 = nil,
+            weapon1 = 4098,
             weapon2 = nil,
             weapon3 = nil,
             weapon4 = nil,
@@ -24,7 +24,7 @@ function PlayerBackpack.init(uid)
             shield = nil
         },
         undressed = {
-            weapon = {},
+            weapon = {4098, 4103},
             hat = {},
             clothes = {},
             shoes = {},
@@ -169,6 +169,8 @@ function PlayerBackpack.calculateAttr(uid)
         end
     end
 
+    local otherEffectTempData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
     for dressedType, item in pairs(PlayerBackpack[uid]['dressed']) do
         if item ~= nil then
             local itemInfo = ALL_BACKPACK_ITEMS[item]
@@ -214,7 +216,26 @@ function PlayerBackpack.calculateAttr(uid)
                 end
             end
 
+            -- 计算玩家附加属性
+            if itemInfo['otherEffect'] ~= nil then
+
+                local idx = itemInfo.otherEffect[1]
+                local value = itemInfo.otherEffect[2]
+
+                otherEffectTempData[idx] = otherEffectTempData[idx] + value
+            end
+
         end
+    end
+
+    for i, v in ipairs(otherEffectTempData) do
+        Valuegroup:setValueNoByName(17, "装备附加效果组", i, v, uid)
+        print("已设置附加属性", i, v)
+    end
+
+    -- 设置旋转武器转速
+    if allPlayerAttr[uid] ~= nil then
+        allPlayerAttr[uid].speed = 0.17 + 0.17 * otherEffectTempData[4] / 100
     end
 
     VarLib2:setPlayerVarByName(uid, 3, "生命值", hp)
@@ -233,6 +254,7 @@ function PlayerBackpack.calculateAttr(uid)
     VarLib2:setPlayerVarByName(uid, 3, "生命恢复百分比", smzhfbfb)
 
     Buff:addBuff(uid, 50000003, 1, 1) -- 刷新面板BUFF
+
 end
 
 --- 更改武器皮肤
@@ -312,9 +334,9 @@ function PlayerBackpack.useItem(uid, itemid)
                 end
 
             elseif ALL_BACKPACK_ITEMS[itemid].effect == 'exp' then -- 经验收益
-                local code = Actor:hasBuff(uid, 5000020)
+                local code = Actor:hasBuff(uid, 50000020)
                 if code ~= 0 then
-                    local _, buffIDImgs = Valuegroup:getAllGroupItem(18, '状态ID图片', uid)
+                    local _, buffIDImgs = Valuegroup:getAllGroupItem(21, '状态道具类型组', uid)
                     local findIndexInBuffIdImgs = function()
                         for i, buffIdImgArrItemid in ipairs(buffIDImgs) do
                             if ALL_BACKPACK_ITEMS[buffIdImgArrItemid].effect == 'exp' then
@@ -327,18 +349,18 @@ function PlayerBackpack.useItem(uid, itemid)
                     local itemIdx = findIndexInBuffIdImgs() -- 找到的exp类型道具索引
                     print("PlayerBackpack.useItem 使用经验收益道具: ", itemid, itemIdx)
                     if itemIdx == nil then
-                        Valuegroup:setValueNoByName(18, '状态ID图片', #buffIDImgs + 1, itemid, uid)
+                        Valuegroup:setValueNoByName(21, '状态道具类型组', #buffIDImgs + 1, itemid, uid)
                         Valuegroup:setValueNoByName(17, 'BUFF时间组', #buffIDImgs + 1,
                             ALL_BACKPACK_ITEMS[itemid].value, uid)
                     else
-                        Valuegroup:setValueNoByName(18, '状态ID图片', itemIdx, itemid, uid)
+                        Valuegroup:setValueNoByName(21, '状态道具类型组', itemIdx, itemid, uid)
                         Valuegroup:setValueNoByName(17, 'BUFF时间组', itemIdx, ALL_BACKPACK_ITEMS[itemid].value, uid)
                     end
 
-                    Actor:addBuff(uid, 5000020, 1, 15 * 24)
+                    Actor:addBuff(uid, 50000020, 1, 15 * 24)
 
                 else
-                    local _, ticks = Actor:getBuffLeftTick(uid, 5000020)
+                    local _, ticks = Actor:getBuffLeftTick(uid, 50000020)
                     Player:notifyGameInfo2Self(uid, "药水使用仍在CD冷却中, 剩余时间: " ..
                         math.floor(ticks / 24) .. "秒")
                     return
@@ -907,7 +929,7 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
 
             if iteminfo.otherEffect ~= nil then
                 Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.other_effect,
-                    ITEMS_OTHER_ATTRS[iteminfo.otherEffect[1]])
+                    string.gsub(ITEMS_OTHER_ATTRS[iteminfo.otherEffect[1]], 'XX', iteminfo.otherEffect[2]))
             else
                 Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.other_effect,
                     "")
@@ -1062,7 +1084,7 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
 
             if iteminfo['otherEffect'] ~= nil then
                 Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.other_effect,
-                    ITEMS_OTHER_ATTRS[iteminfo['otherEffect'][1]])
+                    string.gsub(ITEMS_OTHER_ATTRS[iteminfo.otherEffect[1]], 'XX', iteminfo.otherEffect[2]))
             else
                 Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.other_effect,
                     "")

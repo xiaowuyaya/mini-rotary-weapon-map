@@ -25,16 +25,43 @@ local function rotryWeaponCollideHandle(event)
             local _, playBaojilv = VarLib2:getPlayerVarByName(playerId, 3, "玩家暴击率")
             local _, playBaojiDamage = VarLib2:getPlayerVarByName(playerId, 3, "玩家暴击伤害")
 
+            local _, allOtherEffect = Valuegroup:getAllGroupItem(17, '装备附加效果组', playerId)
+
             if Actor:isPlayer(event.toobjid) ~= 0 then -- 对生物攻击
                 local _, jinzhanfy = Creature:getAttr(event.toobjid, 19)
 
-                damage = (damage * damage / (damage + jinzhanfy)) * (1 + playerdamage)
+                damage = (damage * damage / (damage + (jinzhanfy - (jinzhanfy * allOtherEffect[2] / 100)))) *
+                             (1 + playerdamage)
+
+                -- 附加属性 1 计算
+                damage = damage + allOtherEffect[1]
 
                 local r = math.random() * 100
 
-                if r <= (playBaojilv * 100)then
+                if r <= (playBaojilv * 100) then
                     damage = damage * playBaojiDamage
                 end
+
+                damage = damage + (damage * allOtherEffect[3] / 100)
+
+                if allOtherEffect[6] ~= 0 then
+                    local _, gjl = Creature:getAttr(event.toobjid, 1)
+                    if gjl > 0 then
+                        Creature:setAttr(event.toobjid, 1, gjl - allOtherEffect[6])
+                    end
+                end
+
+                if allOtherEffect[5] ~= 0 then
+                    if jinzhanfy > 0 then
+                        Creature:setAttr(event.toobjid, 19, jinzhanfy - allOtherEffect[5])
+                    end
+                end
+
+                if allOtherEffect[7] ~= 0 then
+                    Actor:addHP(playerId, allOtherEffect[7])
+                end
+
+                
 
                 Actor:playerHurt(playerId, event.toobjid, math.floor(damage), 1)
 
@@ -42,13 +69,22 @@ local function rotryWeaponCollideHandle(event)
                 local _, fyu = VarLib2:getPlayerVarByName(event.toobjid, 3, "玩家防御") -- 对方防御
                 local _, lv = VarLib2:getPlayerVarByName(event.toobjid, 3, "等级") -- 对方防御
 
-                local fybfb = fyu / (fyu + (20 + lv))
+                local fybfb = (fyu - fyu * allOtherEffect[2] / 100) / (fyu + (20 + lv))
                 damage = (damage * (1 - fybfb)) * (1 + playerdamage)
+
+                -- 附加属性 1 计算
+                damage = damage + allOtherEffect[1]
 
                 local r = math.random() * 100
 
                 if r <= (playBaojilv * 100) then
-                    damage = damage *  playBaojiDamage
+                    damage = damage * playBaojiDamage
+                end
+
+                damage = damage + (damage * allOtherEffect[3] / 100)
+
+                if allOtherEffect[7] ~= 0 then
+                    Actor:addHP(playerId, allOtherEffect[7])
                 end
 
                 Actor:playerHurt(playerId, event.toobjid, math.floor(damage), 1)
@@ -56,7 +92,6 @@ local function rotryWeaponCollideHandle(event)
 
             return
 
-            
         end
     end
 end
