@@ -841,12 +841,18 @@ function UIBackpack.handleObjectHuishou(uid, itemid)
             isExist = true
         end
     end
+
+    local rmItemIdx = findIndex(PlayerBackpack[uid]['undressed'][UIBackpack.currentSelectMenuType[uid]], itemid)
+
+    if rmItemIdx == nil then
+        return
+    end
+
     if isExist == false then
         table.insert(PlayerBackpack[uid]['items'], {TuposhiQualityMap[iteminfo.quality], 1})
     end
 
-    table.remove(PlayerBackpack[uid]['undressed'][UIBackpack.currentSelectMenuType[uid]],
-        findIndex(PlayerBackpack[uid]['undressed'][UIBackpack.currentSelectMenuType[uid]], itemid))
+    table.remove(PlayerBackpack[uid]['undressed'][UIBackpack.currentSelectMenuType[uid]], rmItemIdx)
 
 end
 
@@ -1179,6 +1185,11 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         end
 
         local itemType = UIBackpack.currentSelectMenuType[uid]
+
+        if itemType ~= ITEM_TYPE_ENUMS[iteminfo.type] then
+            Player:notifyGameInfo2Self(uid, "装备类型不匹配, 无法穿戴")
+            return
+        end
 
         local currentSelectItemIdx = findIndex(PlayerBackpack[uid]['undressed'][itemType],
             UIBackpack.currentSelectItemId[uid])
