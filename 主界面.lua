@@ -45,4 +45,3 @@ function refresh_player_weapon(event)
 end
 
 ScriptSupportEvent:registerEvent('UI.Button.Click', refresh_player_weapon)
-

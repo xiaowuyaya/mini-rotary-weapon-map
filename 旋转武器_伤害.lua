@@ -61,8 +61,6 @@ local function rotryWeaponCollideHandle(event)
                     Actor:addHP(playerId, allOtherEffect[7])
                 end
 
-                
-
                 Actor:playerHurt(playerId, event.toobjid, math.floor(damage), 1)
 
             else
@@ -87,7 +85,17 @@ local function rotryWeaponCollideHandle(event)
                     Actor:addHP(playerId, allOtherEffect[7])
                 end
 
-                Actor:playerHurt(playerId, event.toobjid, math.floor(damage), 1)
+                if allOtherEffect[9] ~= 0 then
+                    damage = damage - damage * allOtherEffect[9] * 0.01
+                end
+
+                if allOtherEffect[8] ~= 0 then
+                    damage = damage - allOtherEffect[8]
+                end
+
+                damage = damage * 0.3
+
+                Actor:playerHurt(playerId, event.toobjid, math.floor(damage), 2)
             end
 
             return

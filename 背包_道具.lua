@@ -29,12 +29,12 @@ ITEMS_OTHER_ATTRS = {
     [7] = "所有武器攻击命中恢复XX点生命值",
     [8] = "降低受到的伤害XX点",
     [9] = "降低受到的伤害XX%",
-    [10] = "XX%概率躲避对方的攻击",
-    [11] = "受到伤害时，反伤XX%自身攻击的伤害",
-    [12] = "受到伤害时，反伤XX点伤害",
+    [10] = "XX%概率躲避怪物的攻击",
+    [11] = "受到怪物伤害时，反伤XX%自身攻击的真实伤害",
+    [12] = "受到怪物伤害时，反伤XX点真实伤害",
     [13] = "死亡时可原地复活,CD:15分钟",
-    [14] = "每隔10秒对自身范围10格内的所有怪物造成XX%攻击的伤害",
-    [15] = "每隔10秒对自身范围10格内的所有怪物造成XX点伤害",
+    [14] = "每隔10秒对范围10格内的所有怪物造成XX%攻击的真实伤害",
+    [15] = "每隔10秒对范围10格内的所有怪物造成XX点真实伤害",
     -- 附加属性 END
     [50001] = "攻击力",
     [50002] = "防御力",
@@ -58,10 +58,9 @@ ALL_BACKPACK_ITEMS = {
         type = "武器",
         lv = 1,
         quality = QUALITY_ENUM[1],
-        atk = 20,
+        atk = 21,
         img = "8_1118247136_1714210141",
-        otherEffect = {1, 520},
-        hp = 50
+        hp = 33
 
     },
     [4103] = {
@@ -69,10 +68,9 @@ ALL_BACKPACK_ITEMS = {
         type = "武器",
         lv = 10,
         quality = QUALITY_ENUM[1],
-        atk = 50,
+        atk = 31,
         img = "8_1118247136_1714210146",
-        hp = 100,
-        otherEffect = {4, 100},
+        hp = 49,
     },
     [4100] = {
         name = "下品布衣",
@@ -80,7 +78,7 @@ ALL_BACKPACK_ITEMS = {
         lv = 1,
         quality = QUALITY_ENUM[1],
         atk = 5,
-        hp = 150
+        hp = 163
     },
     [4099] = {
         name = "下品头巾",
@@ -88,15 +86,15 @@ ALL_BACKPACK_ITEMS = {
         lv = 1,
         quality = QUALITY_ENUM[1],
         atk = 5,
-        hp = 150
+        hp = 163
     },
     [4126] = {
         name = "中品头巾",
         type = "帽子",
         lv = 5,
         quality = QUALITY_ENUM[2],
-        atk = 10,
-        hp = 300,
+        atk = 7,
+        hp = 242,
         otherAttr = {{50002, 5}}
 
     },
@@ -105,8 +103,8 @@ ALL_BACKPACK_ITEMS = {
         type = "帽子",
         lv = 10,
         quality = QUALITY_ENUM[3],
-        atk = 15,
-        hp = 450,
+        atk = 12,
+        hp = 454,
         otherAttr = {{50002, 10}}
     },
     [4128] = {
@@ -114,8 +112,8 @@ ALL_BACKPACK_ITEMS = {
         type = "衣服",
         lv = 5,
         quality = QUALITY_ENUM[2],
-        atk = 10,
-        hp = 300,
+        atk = 7,
+        hp = 242,
         otherAttr = {{50002, 5}}
     },
     [4129] = {
@@ -123,8 +121,8 @@ ALL_BACKPACK_ITEMS = {
         type = "衣服",
         lv = 10,
         quality = QUALITY_ENUM[3],
-        atk = 15,
-        hp = 450,
+        atk = 12,
+        hp = 454,
         otherAttr = {{50002, 10}}
     },
     [4130] = {
@@ -133,8 +131,8 @@ ALL_BACKPACK_ITEMS = {
         lv = 5,
         img = "8_1118247136_1714210141",
         quality = QUALITY_ENUM[2],
-        atk = 40,
-        hp = 100,
+        atk = 31,
+        hp = 49,
         otherAttr = {{50011, 0.01}}
     },
     [4131] = {
@@ -143,8 +141,8 @@ ALL_BACKPACK_ITEMS = {
         img = "8_1118247136_1714210141",
         lv = 10,
         quality = QUALITY_ENUM[3],
-        atk = 60,
-        hp = 150,
+        atk = 57,
+        hp = 51,
         otherAttr = {{50011, 0.02}}
     },
     [4132] = {
@@ -152,8 +150,8 @@ ALL_BACKPACK_ITEMS = {
         type = "鞋履",
         lv = 1,
         quality = QUALITY_ENUM[1],
-        atk = 10,
-        hp = 100,
+        atk = 9,
+        hp = 82,
         otherAttr = {{50004, 0.05}}
     },
     [4133] = {
@@ -161,8 +159,8 @@ ALL_BACKPACK_ITEMS = {
         type = "鞋履",
         lv = 5,
         quality = QUALITY_ENUM[2],
-        atk = 20,
-        hp = 200,
+        atk = 13,
+        hp = 121,
         otherAttr = {{50004, 0.05}}
     },
     [4134] = {
@@ -170,8 +168,8 @@ ALL_BACKPACK_ITEMS = {
         type = "鞋履",
         lv = 10,
         quality = QUALITY_ENUM[3],
-        atk = 30,
-        hp = 300,
+        atk = 23,
+        hp = 227,
         otherAttr = {{50004, 0.1}}
     },
     [4135] = {
@@ -179,43 +177,43 @@ ALL_BACKPACK_ITEMS = {
         type = "饰品",
         lv = 1,
         quality = QUALITY_ENUM[1],
-        atk = 30,
-        hp = 30,
-        otherAttr = {{50007, 1}}
+        atk = 31,
+        hp = 21,
+        otherAttr = {{50007, 2}}
     },
     [4136] = {
         name = "中品青铜手镯",
         type = "饰品",
         lv = 5,
         quality = QUALITY_ENUM[2],
-        atk = 60,
-        hp = 60,
-        otherAttr = {{50007, 2}}
+        atk = 46,
+        hp = 31,
+        otherAttr = {{50007, 3}}
     },
     [4137] = {
         name = "上品青铜手镯",
         type = "饰品",
         lv = 10,
         quality = QUALITY_ENUM[3],
-        atk = 90,
-        hp = 90,
-        otherAttr = {{50007, 3}}
+        atk = 86,
+        hp = 57,
+        otherAttr = {{50007, 4}}
     },
     [4138] = {
         name = "下品破布护臂",
         type = "护臂",
         lv = 1,
         quality = QUALITY_ENUM[1],
-        atk = 30,
-        hp = 30
+        atk = 31,
+        hp = 21
     },
     [4139] = {
         name = "中品破布护臂",
         type = "护臂",
         lv = 5,
         quality = QUALITY_ENUM[2],
-        atk = 60,
-        hp = 60,
+        atk = 46,
+        hp = 31,
         otherAttr = {{50001, 5}}
     },
     [4140] = {
@@ -223,8 +221,8 @@ ALL_BACKPACK_ITEMS = {
         type = "护臂",
         lv = 10,
         quality = QUALITY_ENUM[3],
-        atk = 90,
-        hp = 90,
+        atk = 86,
+        hp = 57,
         otherAttr = {{50001, 10}}
     },
     [4141] = {
@@ -233,8 +231,8 @@ ALL_BACKPACK_ITEMS = {
         type = "武器",
         lv = 20,
         quality = QUALITY_ENUM[2],
-        atk = 100,
-        hp = 200,
+        atk = 81,
+        hp = 129,
         otherAttr = {{50011, 0.02}}
     },
     [4142] = {
@@ -243,8 +241,8 @@ ALL_BACKPACK_ITEMS = {
         type = "武器",
         lv = 30,
         quality = QUALITY_ENUM[3],
-        atk = 150,
-        hp = 300,
+        atk = 208,
+        hp = 333,
         otherAttr = {{50011, 0.03}}
     },
     [4143] = {
@@ -253,7 +251,7 @@ ALL_BACKPACK_ITEMS = {
         lv = 1,
         quality = QUALITY_ENUM[1],
         atk = 5,
-        hp = 150,
+        hp = 163,
         otherAttr = {{50002, 5}}
 
     },
@@ -262,8 +260,8 @@ ALL_BACKPACK_ITEMS = {
         type = "盾牌",
         lv = 5,
         quality = QUALITY_ENUM[2],
-        atk = 10,
-        hp = 300,
+        atk = 7,
+        hp = 242,
         otherAttr = {{50002, 10}}
     },
     [4145] = {
@@ -271,8 +269,8 @@ ALL_BACKPACK_ITEMS = {
         type = "盾牌",
         lv = 10,
         quality = QUALITY_ENUM[3],
-        atk = 15,
-        hp = 450,
+        atk = 12,
+        hp = 454,
         otherAttr = {{50002, 15}}
     },
     [4146] = {
@@ -281,8 +279,8 @@ ALL_BACKPACK_ITEMS = {
         type = "武器",
         lv = 20,
         quality = QUALITY_ENUM[3],
-        atk = 150,
-        hp = 300,
+        atk = 114,
+        hp = 182,
         otherAttr = {{50001, 20}}
     },
     [4147] = {
@@ -291,8 +289,8 @@ ALL_BACKPACK_ITEMS = {
         type = "武器",
         lv = 30,
         quality = QUALITY_ENUM[4],
-        atk = 300,
-        hp = 600,
+        atk = 293,
+        hp = 469,
         otherAttr = {{50001, 40}, {50011, 0.05}}
     },
     [4148] = {
@@ -349,44 +347,44 @@ ALL_BACKPACK_ITEMS = {
         type = "消耗品",
         lv = 1,
         effect = "hp",
-        value = 100,
+        value = 200,
         quality = QUALITY_ENUM[1],
-        desc = "使用后可恢复100点生命值, CD: 15秒。"
+        desc = "使用后可恢复200点生命值, CD: 15秒。"
     },
     [4156] = {
         name = "2级生命药水",
         type = "消耗品",
         lv = 5,
         effect = "hp",
-        value = 250,
+        value = 500,
         quality = QUALITY_ENUM[1],
-        desc = "使用后可恢复250点生命值, CD: 15秒。"
+        desc = "使用后可恢复500点生命值, CD: 15秒。"
     },
     [4157] = {
         name = "3级生命药水",
         type = "消耗品",
         lv = 10,
         effect = "hp",
-        value = 500,
+        value = 1000,
         quality = QUALITY_ENUM[1],
-        desc = "使用后可恢复500点生命值, CD: 15秒。"
+        desc = "使用后可恢复1000点生命值, CD: 15秒。"
     },
     [4158] = {
         name = "4级生命药水",
         type = "消耗品",
         lv = 20,
         effect = "hp",
-        value = 1000,
+        value = 2000,
         quality = QUALITY_ENUM[1],
-        desc = "使用后可恢复1000点生命值, CD: 15秒。"
+        desc = "使用后可恢复2000点生命值, CD: 15秒。"
     },
     [4180] = {
         name = "下品破衣",
         type = "衣服",
         lv = 10,
         quality = QUALITY_ENUM[1],
-        atk = 12,
-        hp = 360
+        atk = 7,
+        hp = 243
 
     },
     [4181] = {
@@ -394,8 +392,8 @@ ALL_BACKPACK_ITEMS = {
         type = "衣服",
         lv = 20,
         quality = QUALITY_ENUM[2],
-        atk = 24,
-        hp = 720,
+        atk = 17,
+        hp = 644,
         otherAttr = {{50002, 5}}
     },
     [4182] = {
@@ -403,8 +401,8 @@ ALL_BACKPACK_ITEMS = {
         type = "衣服",
         lv = 30,
         quality = QUALITY_ENUM[3],
-        atk = 36,
-        hp = 1080,
+        atk = 42,
+        hp = 1664,
         otherAttr = {{50002, 10}}
     },
     [4183] = {
@@ -412,8 +410,8 @@ ALL_BACKPACK_ITEMS = {
         type = "帽子",
         lv = 10,
         quality = QUALITY_ENUM[1],
-        atk = 12,
-        hp = 360
+        atk = 7,
+        hp = 243
 
     },
     [4184] = {
@@ -421,8 +419,8 @@ ALL_BACKPACK_ITEMS = {
         type = "帽子",
         lv = 20,
         quality = QUALITY_ENUM[2],
-        atk = 24,
-        hp = 720,
+        atk = 17,
+        hp = 644,
         otherAttr = {{50002, 5}}
     },
     [4185] = {
@@ -430,8 +428,8 @@ ALL_BACKPACK_ITEMS = {
         type = "帽子",
         lv = 30,
         quality = QUALITY_ENUM[3],
-        atk = 36,
-        hp = 1080,
+        atk = 42,
+        hp = 1664,
         otherAttr = {{50002, 10}}
     },
     [4186] = {
@@ -439,8 +437,8 @@ ALL_BACKPACK_ITEMS = {
         type = "护臂",
         lv = 10,
         quality = QUALITY_ENUM[1],
-        atk = 75,
-        hp = 75
+        atk = 46,
+        hp = 31
 
     },
     [4187] = {
@@ -448,8 +446,8 @@ ALL_BACKPACK_ITEMS = {
         type = "护臂",
         lv = 20,
         quality = QUALITY_ENUM[2],
-        atk = 150,
-        hp = 150,
+        atk = 121,
+        hp = 81,
         otherAttr = {{50011, 0.02}}
     },
     [4188] = {
@@ -457,8 +455,8 @@ ALL_BACKPACK_ITEMS = {
         type = "护臂",
         lv = 30,
         quality = QUALITY_ENUM[3],
-        atk = 225,
-        hp = 225,
+        atk = 312,
+        hp = 208,
         otherAttr = {{50011, 0.03}}
     },
     [4189] = {
@@ -466,8 +464,8 @@ ALL_BACKPACK_ITEMS = {
         type = "鞋履",
         lv = 10,
         quality = QUALITY_ENUM[1],
-        atk = 25,
-        hp = 250,
+        atk = 13,
+        hp = 122,
         otherAttr = {{50004, 0.05}}
     },
     [4190] = {
@@ -475,8 +473,8 @@ ALL_BACKPACK_ITEMS = {
         type = "鞋履",
         lv = 20,
         quality = QUALITY_ENUM[2],
-        atk = 50,
-        hp = 500,
+        atk = 33,
+        hp = 322,
         otherAttr = {{50004, 0.05}}
     },
     [4191] = {
@@ -484,8 +482,8 @@ ALL_BACKPACK_ITEMS = {
         type = "鞋履",
         lv = 30,
         quality = QUALITY_ENUM[3],
-        atk = 75,
-        hp = 750,
+        atk = 84,
+        hp = 832,
         otherAttr = {{50004, 0.1}}
     },
     [4192] = {
@@ -494,8 +492,8 @@ ALL_BACKPACK_ITEMS = {
         type = "武器",
         lv = 20,
         quality = QUALITY_ENUM[1],
-        atk = 75,
-        hp = 150
+        atk = 61,
+        hp = 97
     },
     [4193] = {
         name = "中品玄铁剑",
@@ -503,8 +501,8 @@ ALL_BACKPACK_ITEMS = {
         type = "武器",
         lv = 30,
         quality = QUALITY_ENUM[2],
-        atk = 150,
-        hp = 300,
+        atk = 148,
+        hp = 236,
         otherAttr = {{50008, 0.03}}
     },
     [4194] = {
@@ -513,8 +511,8 @@ ALL_BACKPACK_ITEMS = {
         type = "武器",
         lv = 40,
         quality = QUALITY_ENUM[3],
-        atk = 225,
-        hp = 450,
+        atk = 341,
+        hp = 545,
         otherAttr = {{50008, 0.05}}
     },
     [4195] = {
@@ -522,8 +520,8 @@ ALL_BACKPACK_ITEMS = {
         type = "盾牌",
         lv = 10,
         quality = QUALITY_ENUM[1],
-        atk = 12,
-        hp = 360,
+        atk = 7,
+        hp = 243,
         otherAttr = {{50002, 5}}
     },
     [4196] = {
@@ -531,8 +529,8 @@ ALL_BACKPACK_ITEMS = {
         type = "盾牌",
         lv = 20,
         quality = QUALITY_ENUM[2],
-        atk = 24,
-        hp = 720,
+        atk = 17,
+        hp = 644,
         otherAttr = {{50002, 10}}
     },
     [4197] = {
@@ -540,8 +538,8 @@ ALL_BACKPACK_ITEMS = {
         type = "盾牌",
         lv = 30,
         quality = QUALITY_ENUM[3],
-        atk = 36,
-        hp = 1080,
+        atk = 42,
+        hp = 1664,
         otherAttr = {{50002, 15}}
     },
     [4198] = {
@@ -549,35 +547,35 @@ ALL_BACKPACK_ITEMS = {
         type = "饰品",
         lv = 10,
         quality = QUALITY_ENUM[1],
-        atk = 75,
-        hp = 75,
-        otherAttr = {{50007, 2}}
+        atk = 46,
+        hp = 31,
+        otherAttr = {{50007, 3}}
     },
     [4199] = {
         name = "中品红石戒指",
         type = "饰品",
         lv = 20,
         quality = QUALITY_ENUM[2],
-        atk = 150,
-        hp = 150,
-        otherAttr = {{50007, 4}}
+        atk = 121,
+        hp = 81,
+        otherAttr = {{50007, 6}}
     },
     [4200] = {
         name = "上品红石戒指",
         type = "饰品",
         lv = 30,
         quality = QUALITY_ENUM[3],
-        atk = 225,
-        hp = 225,
-        otherAttr = {{50007, 6}}
+        atk = 312,
+        hp = 208,
+        otherAttr = {{50007, 9}}
     },
     [4201] = {
         name = "卓越锁子甲",
         type = "衣服",
         lv = 30,
         quality = QUALITY_ENUM[3],
-        atk = 40,
-        hp = 1200,
+        atk = 42,
+        hp = 1664,
         otherAttr = {{50002, 15}}
     },
     [4202] = {
@@ -585,8 +583,8 @@ ALL_BACKPACK_ITEMS = {
         type = "衣服",
         lv = 45,
         quality = QUALITY_ENUM[4],
-        atk = 80,
-        hp = 2400,
+        atk = 119,
+        hp = 4735,
         otherAttr = {{50002, 20}, {50012, 0.1}}
     },
     [4203] = {
@@ -594,8 +592,8 @@ ALL_BACKPACK_ITEMS = {
         type = "帽子",
         lv = 55,
         quality = QUALITY_ENUM[4],
-        atk = 120,
-        hp = 3600,
+        atk = 172,
+        hp = 6863,
         otherAttr = {{50002, 20}, {50012, 0.1}}
     },
     [4159] = {
@@ -603,18 +601,18 @@ ALL_BACKPACK_ITEMS = {
         type = "消耗品",
         lv = 35,
         effect = "hp",
-        value = 1500,
+        value = 4000,
         quality = QUALITY_ENUM[1],
-        desc = "使用后可恢复1500点生命值, CD: 15秒。"
+        desc = "使用后可恢复4000点生命值, CD: 15秒。"
     },
     [4160] = {
         name = "6级生命药水",
         type = "消耗品",
         lv = 50,
         effect = "hp",
-        value = 2500,
+        value = 7000,
         quality = QUALITY_ENUM[1],
-        desc = "使用后可恢复2500点生命值, CD: 15秒。"
+        desc = "使用后可恢复7000点生命值, CD: 15秒。"
     },
     [4206] = {
         name = "桃花剑",
@@ -622,8 +620,8 @@ ALL_BACKPACK_ITEMS = {
         type = "武器",
         lv = 40,
         quality = QUALITY_ENUM[4],
-        atk = 400,
-        hp = 800,
+        atk = 479,
+        hp = 767,
         otherAttr = {{50005, 0.05}, {50011, 0.05}}
     },
     [4207] = {
@@ -631,9 +629,9 @@ ALL_BACKPACK_ITEMS = {
         type = "饰品",
         lv = 45,
         quality = QUALITY_ENUM[4],
-        atk = 600,
-        hp = 600,
-        otherAttr = {{50009, 0.1}, {50007, 10}}
+        atk = 888,
+        hp = 592,
+        otherAttr = {{50009, 0.1}, {50007, 30}}
     },
     [4208] = {
         name = "仙女剑",
@@ -641,9 +639,10 @@ ALL_BACKPACK_ITEMS = {
         type = "武器",
         lv = 60,
         quality = QUALITY_ENUM[5],
-        atk = 800,
-        hp = 1600,
-        otherAttr = {{50009, 0.1}, {50011, 0.05}}
+        atk = 1526,
+        hp = 2442,
+        otherAttr = {{50009, 0.1}, {50011, 0.05}},
+        otherEffect = {4, 5},
     },
     [4209] = {
         name = "通用副本卷轴",
@@ -693,26 +692,26 @@ ALL_BACKPACK_ITEMS = {
         type = "鞋履",
         lv = 30,
         quality = QUALITY_ENUM[1],
-        atk = 55,
-        hp = 550
+        atk = 45,
+        hp = 445
     },
     [4231] = {
         name = "中品神木靴",
         type = "鞋履",
         lv = 45,
         quality = QUALITY_ENUM[2],
-        atk = 110,
-        hp = 1100,
-        otherAttr = {{50007, 6}}
+        atk = 120,
+        hp = 1193,
+        otherAttr = {{50007, 10}}
     },
     [4232] = {
         name = "上品神木靴",
         type = "鞋履",
         lv = 60,
         quality = QUALITY_ENUM[3],
-        atk = 165,
-        hp = 1650,
-        otherAttr = {{50007, 8}, {50004, 0.05}}
+        atk = 288,
+        hp = 2873,
+        otherAttr = {{50007, 20}, {50004, 0.05}}
     },
     [4233] = {
         name = "下品神木剑",
@@ -720,8 +719,8 @@ ALL_BACKPACK_ITEMS = {
         img = "8_1118247136_1714927540",
         lv = 30,
         quality = QUALITY_ENUM[1],
-        atk = 120,
-        hp = 240
+        atk = 112,
+        hp = 178
     },
     [4234] = {
         name = "中品神木剑",
@@ -729,9 +728,9 @@ ALL_BACKPACK_ITEMS = {
         img = "8_1118247136_1714927540",
         lv = 45,
         quality = QUALITY_ENUM[2],
-        atk = 240,
-        hp = 360,
-        otherAttr = {{50007, 6}}
+        atk = 299,
+        hp = 478,
+        otherAttr = {{50007, 10}}
     },
     [4235] = {
         name = "上品神木剑",
@@ -739,95 +738,95 @@ ALL_BACKPACK_ITEMS = {
         img = "8_1118247136_1714927540",
         lv = 60,
         quality = QUALITY_ENUM[3],
-        atk = 360,
-        hp = 720,
-        otherAttr = {{50007, 8}, {50011, 0.05}}
+        atk = 719,
+        hp = 1150,
+        otherAttr = {{50007, 20}, {50011, 0.05}}
     },
     [4236] = {
         name = "下品神木冠",
         type = "帽子",
         lv = 30,
         quality = QUALITY_ENUM[1],
-        atk = 28,
-        hp = 840
+        atk = 23,
+        hp = 889
     },
     [4237] = {
         name = "中品神木冠",
         type = "帽子",
         lv = 45,
         quality = QUALITY_ENUM[2],
-        atk = 56,
-        hp = 1680,
-        otherAttr = {{50007, 6}}
+        atk = 60,
+        hp = 2386,
+        otherAttr = {{50007, 10}}
     },
     [4238] = {
-        name = "中品神木冠",
+        name = "上品神木冠",
         type = "帽子",
         lv = 60,
         quality = QUALITY_ENUM[3],
-        atk = 84,
-        hp = 2520,
-        otherAttr = {{50007, 8}, {50013, 0.05}}
+        atk = 114,
+        hp = 5746,
+        otherAttr = {{50007, 20}, {50013, 0.05}}
     },
     [4239] = {
         name = "下品神木护臂",
         type = "护臂",
         lv = 30,
         quality = QUALITY_ENUM[1],
-        atk = 180,
-        hp = 180
+        atk = 167,
+        hp = 112
     },
     [4240] = {
         name = "中品神木护臂",
         type = "护臂",
         lv = 45,
         quality = QUALITY_ENUM[2],
-        atk = 360,
-        hp = 360,
-        otherAttr = {{50007, 6}}
+        atk = 448,
+        hp = 299,
+        otherAttr = {{50007, 10}}
     },
     [4241] = {
         name = "上品神木护臂",
         type = "护臂",
         lv = 60,
         quality = QUALITY_ENUM[3],
-        atk = 540,
-        hp = 540,
-        otherAttr = {{50007, 8}, {50006, 0.05}}
+        atk = 1078,
+        hp = 719,
+        otherAttr = {{50007, 20}, {50006, 0.05}}
     },
     [4242] = {
         name = "下品神木服",
         type = "衣服",
         lv = 30,
         quality = QUALITY_ENUM[1],
-        atk = 28,
-        hp = 840
+        atk = 23,
+        hp = 889
     },
     [4243] = {
         name = "中品神木服",
         type = "衣服",
         lv = 45,
         quality = QUALITY_ENUM[2],
-        atk = 56,
-        hp = 1680,
-        otherAttr = {{50007, 6}}
+        atk = 60,
+        hp = 2386,
+        otherAttr = {{50007, 10}}
     },
     [4244] = {
         name = "上品神木服",
         type = "衣服",
         lv = 60,
         quality = QUALITY_ENUM[3],
-        atk = 84,
-        hp = 2520,
-        otherAttr = {{50007, 8}, {50013, 0.05}}
+        atk = 144,
+        hp = 5746,
+        otherAttr = {{50007, 20}, {50013, 0.05}}
     },
     [4245] = {
         name = "下品神木盾",
         type = "盾牌",
         lv = 30,
         quality = QUALITY_ENUM[1],
-        atk = 28,
-        hp = 840,
+        atk = 23,
+        hp = 889,
         otherAttr = {{50002, 5}}
     },
     [4246] = {
@@ -835,52 +834,52 @@ ALL_BACKPACK_ITEMS = {
         type = "盾牌",
         lv = 45,
         quality = QUALITY_ENUM[2],
-        atk = 56,
-        hp = 1680,
-        otherAttr = {{50007, 4}, {50002, 10}}
+        atk = 60,
+        hp = 2386,
+        otherAttr = {{50007, 8}, {50002, 10}}
     },
     [4247] = {
         name = "上品神木盾",
         type = "盾牌",
         lv = 60,
         quality = QUALITY_ENUM[3],
-        atk = 84,
-        hp = 2520,
-        otherAttr = {{50007, 6}, {50002, 15}}
+        atk = 144,
+        hp = 5746,
+        otherAttr = {{50007, 15}, {50002, 15}}
     },
     [4248] = {
         name = "下品神木戒",
         type = "饰品",
         lv = 30,
         quality = QUALITY_ENUM[1],
-        atk = 180,
-        hp = 180
+        atk = 167,
+        hp = 112
     },
     [4249] = {
         name = "中品神木戒",
         type = "饰品",
         lv = 45,
         quality = QUALITY_ENUM[2],
-        atk = 360,
-        hp = 360,
-        otherAttr = {{50007, 6}}
+        atk = 448,
+        hp = 299,
+        otherAttr = {{50007, 10}}
     },
     [4250] = {
         name = "上品神木戒",
         type = "饰品",
         lv = 60,
         quality = QUALITY_ENUM[3],
-        atk = 540,
-        hp = 540,
-        otherAttr = {{50007, 8}, {50013, 0.05}}
+        atk = 1078,
+        hp = 719,
+        otherAttr = {{50007, 20}, {50013, 0.05}}
     },
     [4251] = {
         name = "下品长靴",
         type = "鞋履",
         lv = 50,
         quality = QUALITY_ENUM[1],
-        atk = 100,
-        hp = 1000,
+        atk = 110,
+        hp = 1091,
         otherAttr = {{50004, 0.05}}
     },
     [4252] = {
@@ -888,8 +887,8 @@ ALL_BACKPACK_ITEMS = {
         type = "鞋履",
         lv = 65,
         quality = QUALITY_ENUM[2],
-        atk = 200,
-        hp = 2000,
+        atk = 238,
+        hp = 2372,
         otherAttr = {{50004, 0.1}}
     },
     [4253] = {
@@ -897,8 +896,8 @@ ALL_BACKPACK_ITEMS = {
         type = "鞋履",
         lv = 80,
         quality = QUALITY_ENUM[3],
-        atk = 300,
-        hp = 3000,
+        atk = 499,
+        hp = 4990,
         otherAttr = {{50004, 0.15}}
     },
     [4254] = {
@@ -906,16 +905,16 @@ ALL_BACKPACK_ITEMS = {
         type = "饰品",
         lv = 50,
         quality = QUALITY_ENUM[1],
-        atk = 320,
-        hp = 320
+        atk = 410,
+        hp = 273
     },
     [4255] = {
         name = "中品空虚戒指",
         type = "饰品",
         lv = 65,
         quality = QUALITY_ENUM[2],
-        atk = 640,
-        hp = 640,
+        atk = 890,
+        hp = 593,
         otherAttr = {{50008, 0.04}}
     },
     [4256] = {
@@ -923,8 +922,8 @@ ALL_BACKPACK_ITEMS = {
         type = "饰品",
         lv = 80,
         quality = QUALITY_ENUM[3],
-        atk = 1280,
-        hp = 1280,
+        atk = 1872,
+        hp = 1248,
         otherAttr = {{50008, 0.06}}
     },
     [4257] = {
@@ -932,8 +931,8 @@ ALL_BACKPACK_ITEMS = {
         type = "护臂",
         lv = 60,
         quality = QUALITY_ENUM[3],
-        atk = 600,
-        hp = 600,
+        atk = 1078,
+        hp = 719,
         otherAttr = {{50005, 0.05}}
     },
     [4258] = {
@@ -941,8 +940,8 @@ ALL_BACKPACK_ITEMS = {
         type = "护臂",
         lv = 80,
         quality = QUALITY_ENUM[4],
-        atk = 1200,
-        hp = 1200,
+        atk = 2634,
+        hp = 1756,
         otherAttr = {{50005, 0.05}, {50006, 0.1}}
     },
     [4259] = {
@@ -950,26 +949,647 @@ ALL_BACKPACK_ITEMS = {
         type = "盾牌",
         lv = 100,
         quality = QUALITY_ENUM[4],
-        atk = 280,
-        hp = 8400,
+        atk = 543,
+        hp = 21706,
         otherAttr = {{50002, 40}, {50012, 0.1}}
     },
     [4161] = {
         name = "7级生命药水",
         type = "消耗品",
-        lv = 70,
+        lv = 65,
         effect = "hp",
-        value = 4000,
+        value = 11000,
         quality = QUALITY_ENUM[1],
-        desc = "使用后可恢复4000点生命值, CD: 15秒。"
+        desc = "使用后可恢复11000点生命值, CD: 15秒。"
     },
     [4162] = {
         name = "8级生命药水",
         type = "消耗品",
-        lv = 90,
+        lv = 80,
         effect = "hp",
-        value = 6000,
+        value = 16000,
         quality = QUALITY_ENUM[1],
-        desc = "使用后可恢复6000点生命值, CD: 15秒。"
-    }
+        desc = "使用后可恢复16000点生命值, CD: 15秒。"
+    },
+    [4261] = {
+        name = "下品乌钢剑",
+        type = "武器",
+        img = "8_1118247136_1715079015",
+        lv = 50,
+        quality = QUALITY_ENUM[1],
+        atk = 273,
+        hp = 437,
+    },
+    [4262] = {
+        name = "中品乌钢剑",
+        type = "武器",
+        img = "8_1118247136_1715079015",
+        lv = 65,
+        quality = QUALITY_ENUM[2],
+        atk = 593,
+        hp = 949,
+        otherAttr = {{50011, 0.05}}
+    },
+    [4263] = {
+        name = "上品乌钢剑",
+        type = "武器",
+        img = "8_1118247136_1715079015",
+        lv = 80,
+        quality = QUALITY_ENUM[3],
+        atk = 1248,
+        hp = 1996,
+        otherAttr = {{50011, 0.07}},
+        otherEffect = {1, 300},
+    },
+    [4264] = {
+        name = "卓越青裘靴",
+        type = "鞋履",
+        lv = 60,
+        quality = QUALITY_ENUM[3],
+        atk = 288,
+        hp = 2873,
+        otherAttr = {{50004, 0.1}},
+    },
+    [4265] = {
+        name = "传奇青裘靴",
+        type = "鞋履",
+        lv = 80,
+        quality = QUALITY_ENUM[4],
+        atk = 703,
+        hp = 7023,
+        otherAttr = {{50004, 0.15}},
+        otherEffect = {10, 5},
+    },
+    [4266] = {
+        name = "青金石指环",
+        type = "饰品",
+        lv = 100,
+        quality = QUALITY_ENUM[4],
+        atk = 4070,
+        hp = 2714,
+        otherAttr = {{50007,50}},
+        otherEffect = {3, 5},
+    },
+    [4276] = {
+        name = "困兽禁地入场券",
+        type = "材料",
+        lv = 1,
+        quality = QUALITY_ENUM[4],
+        desc = "可用于进入[困兽禁地]副本的门票"
+    },
+ [4277] = {
+        name = "卓越红石戒指",
+        type = "饰品",
+        lv = 60,
+        quality = QUALITY_ENUM[3],
+        atk = 1078,
+        hp = 719,
+        otherAttr = {{50007,40}},
+    },
+    [4278] = {
+        name = "钢铁甲",
+        type = "衣服",
+        lv = 60,
+        quality = QUALITY_ENUM[3],
+        atk = 144,
+        hp = 5746,
+        otherAttr = {{50002,15}},
+    },
+    [4279] = {
+        name = "钢铁护臂",
+        type = "护臂",
+        lv = 60,
+        quality = QUALITY_ENUM[3],
+        atk = 1078,
+        hp = 719,
+        otherAttr = {{50002,15}},
+    },
+    [4280] = {
+        name = "软皮靴",
+        type = "鞋履",
+        lv = 60,
+        quality = QUALITY_ENUM[3],
+        atk = 288,
+        hp = 2873,
+        otherAttr = {{50004,0.1}},
+    },
+    [4281] = {
+        name = "传奇红石戒指",
+        type = "饰品",
+        lv = 70,
+        quality = QUALITY_ENUM[4],
+        atk = 2035,
+        hp = 1357,
+        otherAttr = {{50007,100},{50014,0.2}},
+    },
+    [4282] = {
+        name = "卓越骑士铠甲",
+        type = "衣服",
+        lv = 70,
+        quality = QUALITY_ENUM[3],
+        atk = 193,
+        hp =7712,
+        otherAttr = {{50002,20},},
+        otherEffect = {8, 50},
+    },
+    [4283] = {
+        name = "传奇骑士铠甲",
+        type = "衣服",
+        lv = 80,
+        quality = QUALITY_ENUM[4],
+        atk = 352,
+        hp = 14045,
+        otherAttr = {{50002,25},},
+        otherEffect = {8, 100},
+    },
+    [4284] = {
+        name = "卓越骑士盾牌",
+        type = "盾牌",
+        lv = 70,
+        quality = QUALITY_ENUM[3],
+        atk = 193,
+        hp = 7712,
+        otherAttr = {{50002,20},},
+        otherEffect = {8, 50},
+    },
+    [4285] = {
+        name = "传奇骑士盾牌",
+        type = "盾牌",
+        lv = 80,
+        quality = QUALITY_ENUM[4],
+        atk = 352,
+        hp = 14045,
+        otherAttr = {{50002,25},},
+        otherEffect = {8, 100},
+    },
+    [4286] = {
+        name = "远古狼头盔",
+        type = "帽子",
+        lv = 80,
+        quality = QUALITY_ENUM[4],
+        atk = 352,
+        hp = 14045,
+        otherAttr = {{50011,0.1},{50005,0.05}},
+    },
+    [4287] = {
+        name = "不朽狼头盔",
+        type = "帽子",
+        lv = 100,
+        quality = QUALITY_ENUM[5],
+        atk = 820,
+        hp = 32763,
+        otherAttr = {{50011,0.15},{50005,0.05}},
+        otherEffect = {7, 50},
+    },
+    [4288] = {
+        name = "远古狼护腕",
+        type = "护臂",
+        lv = 80,
+        quality = QUALITY_ENUM[4],
+        atk = 2634,
+        hp = 1756,
+        otherAttr = {{50011,0.1},{50005,0.05}},
+    },
+    [4289] = {
+        name = "不朽狼护腕",
+        type = "护臂",
+        lv = 100,
+        quality = QUALITY_ENUM[5],
+        atk = 6143,
+        hp = 4096,
+        otherAttr = {{50011,0.15},{50005,0.05}},
+        otherEffect = {7, 50},
+    },
+    [4290] = {
+        name = "破魂剑",
+        type = "武器",
+        img = "8_1118247136_1715334846",
+        lv = 100,
+        quality = QUALITY_ENUM[5],
+        atk = 4096,
+        hp = 6553,
+        otherAttr = {{50008,0.1},{50001,1500}},
+        otherEffect = {5, 10},
+    },
+    [4291] = {
+        name = "黑武靴",
+        type = "鞋履",
+        lv = 120,
+        quality = QUALITY_ENUM[6],
+        atk = 4258,
+        hp = 42574,
+        otherAttr = {{50004,0.15},{50003,50000},{50001,5000}},
+        otherEffect = {1, 3000},
+    },
+    [4163] = {
+        name = "9级生命药水",
+        type = "消耗品",
+        lv = 100,
+        effect = "hp",
+        value = 23000,
+        quality = QUALITY_ENUM[1],
+        desc = "使用后可恢复23000点生命值, CD: 15秒。"
+    },
+[4292] = {
+        name = "副本传送卷轴",
+        type = "消耗品",
+        lv = 1,
+        effect = "tp",
+        value = 0,
+        quality = QUALITY_ENUM[2],
+        desc = "使用后可进行一次副本地点的传送。"
+    },
+    [4302] = {
+        name = "下品燃烧宝石",
+        type = "饰品",
+        lv = 60,
+        quality = QUALITY_ENUM[1],
+        atk = 576,
+        hp = 384,
+    },
+    [4303] = {
+        name = "中品燃烧宝石",
+        type = "饰品",
+        lv = 80,
+        quality = QUALITY_ENUM[2],
+        atk = 1327,
+        hp = 885,
+        otherAttr = {{50013,0.05},},
+    },
+    [4304] = {
+        name = "上品燃烧宝石",
+        type = "饰品",
+        lv = 100,
+        quality = QUALITY_ENUM[3],
+        atk = 2892,
+        hp = 1928,
+        otherAttr = {{50013,0.1},},
+    },
+    [4305] = {
+        name = "下品烈火甲",
+        type = "衣服",
+        lv = 60,
+        quality = QUALITY_ENUM[1],
+        atk = 77,
+        hp = 3071,
+    },
+    [4306] = {
+        name = "中品烈火甲",
+        type = "衣服",
+        lv = 80,
+        quality = QUALITY_ENUM[2],
+        atk = 177,
+        hp = 7076,
+        otherAttr = {{50002,20},},
+    },
+    [4307] = {
+        name = "上品烈火甲",
+        type = "衣服",
+        lv = 100,
+        quality = QUALITY_ENUM[3],
+        atk = 386,
+        hp = 15423,
+        otherAttr = {{50002,25},},
+        otherEffect = {15, 5000},
+    },
+    [4308] = {
+        name = "下品烈火盾",
+        type = "盾牌",
+        lv = 60,
+        quality = QUALITY_ENUM[1],
+        atk = 77,
+        hp = 3071,
+        otherAttr = {{50002,15},},
+    },
+    [4309] = {
+        name = "中品烈火盾",
+        type = "盾牌",
+        lv = 80,
+        quality = QUALITY_ENUM[2],
+        atk = 177,
+        hp = 7076,
+        otherAttr = {{50002,25},},
+    },
+    [4310] = {
+        name = "上品烈火盾",
+        type = "盾牌",
+        lv = 100,
+        quality = QUALITY_ENUM[3],
+        atk = 386,
+        hp = 15423,
+        otherAttr = {{50002,35},},
+        otherEffect = {15, 5000},
+    },
+    [4311] = {
+        name = "下品烈火靴",
+        type = "鞋履",
+        lv = 60,
+        quality = QUALITY_ENUM[1],
+        atk = 154,
+        hp = 1536,
+        otherAttr = {{50004,0.05},},
+    },
+    [4312] = {
+        name = "中品烈火靴",
+        type = "鞋履",
+        lv = 80,
+        quality = QUALITY_ENUM[2],
+        atk = 354,
+        hp = 3538,
+        otherAttr = {{50004,0.1},},
+    },
+    [4313] = {
+        name = "上品烈火靴",
+        type = "鞋履",
+        lv = 100,
+        quality = QUALITY_ENUM[3],
+        atk = 772,
+        hp = 7712,
+        otherAttr = {{50004,0.1},},
+        otherEffect = {15, 5000},
+    },
+    [4314] = {
+        name = "下品烈火剑",
+        type = "武器",
+        img = "8_1118247136_1715703814",
+        lv = 60,
+        quality = QUALITY_ENUM[1],
+        atk = 384,
+        hp = 615,
+
+    },
+    [4315] = {
+        name = "中品烈火剑",
+        type = "武器",
+        img = "8_1118247136_1715703814",
+        lv = 80,
+        quality = QUALITY_ENUM[2],
+        atk = 885,
+        hp = 1416,
+        otherAttr = {{50011,0.06},},
+    },
+    [4316] = {
+        name = "上品烈火剑",
+        type = "武器",
+        img = "8_1118247136_1715703814",
+        lv = 100,
+        quality = QUALITY_ENUM[3],
+        atk = 1928,
+        hp = 3085,
+        otherAttr = {{50011,0.08},},
+        otherEffect = {15, 5000},
+    },
+    [4317] = {
+        name = "下品烈火护臂",
+        type = "护臂",
+        lv = 60,
+        quality = QUALITY_ENUM[1],
+        atk = 576,
+        hp = 384,
+
+    },
+    [4318] = {
+        name = "中品烈火护臂",
+        type = "护臂",
+        lv = 80,
+        quality = QUALITY_ENUM[2],
+        atk = 1327,
+        hp = 885,
+        otherAttr = {{50008,0.05},},
+    },
+    [4319] = {
+        name = "上品烈火护臂",
+        type = "护臂",
+        lv = 100,
+        quality = QUALITY_ENUM[3],
+        atk = 2892,
+        hp = 1928,
+        otherAttr = {{50008,0.05},},
+        otherEffect = {15, 5000},
+    },
+    [4320] = {
+        name = "下品熔火铠甲",
+        type = "衣服",
+        lv = 90,
+        quality = QUALITY_ENUM[1],
+        atk = 168,
+        hp = 6707,
+        otherAttr = {{50002,20},},
+    },
+    [4321] = {
+        name = "中品熔火铠甲",
+        type = "衣服",
+        lv = 105,
+        quality = QUALITY_ENUM[2],
+        atk = 301,
+        hp = 12034,
+        otherAttr = {{50002,25},},
+    },
+    [4322] = {
+        name = "上品熔火铠甲",
+        type = "衣服",
+        lv = 120,
+        quality = QUALITY_ENUM[3],
+        atk = 552,
+        hp = 22076,
+        otherAttr = {{50002,30},{50013,0.05},},
+    },
+    [4323] = {
+        name = "卓越熔岩剑",
+        type = "武器",
+        img = "8_1118247136_1715704930",
+        lv = 100,
+        quality = QUALITY_ENUM[3],
+        atk = 1928,
+        hp = 3085,
+        otherAttr = {{50008,0.05},},
+    },
+    [4324] = {
+        name = "传奇熔岩剑",
+        type = "武器",
+        img = "8_1118247136_1715704930",
+        lv = 120,
+        quality = QUALITY_ENUM[4],
+        atk = 3884,
+        hp = 6214,
+        otherAttr = {{50008,0.08},},
+        otherEffect = {1, 1000},
+    },
+    [4325] = {
+        name = "熔岩护臂",
+        type = "护臂",
+        lv = 135,
+        quality = QUALITY_ENUM[4],
+        atk = 7352,
+        hp = 4902,
+        otherAttr = {{50012,0.2},{50013,0.1},},
+    },
+    [4164] = {
+        name = "10级生命药水",
+        type = "消耗品",
+        lv = 120,
+        effect = "hp",
+        value = 32000,
+        quality = QUALITY_ENUM[1],
+        desc = "使用后可恢复32000点生命值, CD: 15秒。"
+    },
+    [4335] = {
+        name = "熔岩禁地入场券",
+        type = "材料",
+        lv = 1,
+        quality = QUALITY_ENUM[4],
+        desc = "可用于进入[熔岩禁地]副本的门票"
+    },
+    [4165] = {
+        name = "11级生命药水",
+        type = "消耗品",
+        lv = 140,
+        effect = "hp",
+        value = 50000,
+        quality = QUALITY_ENUM[1],
+        desc = "使用后可恢复50000点生命值, CD: 15秒。"
+    },
+    [4336] = {
+        name = "青铜匕首",
+        type = "武器",
+        img = "8_1118247136_1715887160",
+        lv = 100,
+        quality = QUALITY_ENUM[3],
+        atk = 1928,
+        hp = 3085,
+        otherAttr = {{50005,0.05},{50011,0.05},},
+    },
+    [4337] = {
+        name = "青铜骑士头盔",
+        type = "帽子",
+        lv = 100,
+        quality = QUALITY_ENUM[3],
+        atk = 386,
+        hp = 15423,
+        otherAttr = {{50002,40},},
+    },
+    [4338] = {
+        name = "卷云靴",
+        type = "鞋履",
+        lv = 100,
+        quality = QUALITY_ENUM[3],
+        atk = 772,
+        hp = 7712,
+        otherAttr = {{50004,0.15},},
+        otherEffect = {4, 5},
+    },
+    [4339] = {
+        name = "卓越五角盾",
+        type = "盾牌",
+        lv = 100,
+        quality = QUALITY_ENUM[3],
+        atk = 386,
+        hp = 15423,
+        otherAttr = {{50002,30},{50012,0.1},},
+    },
+    [4340] = {
+        name = "传奇五角盾",
+        type = "盾牌",
+        lv = 110,
+        quality = QUALITY_ENUM[4],
+        atk = 655,
+        hp = 26175,
+        otherAttr = {{50002,40},{50012,0.2},},
+    },
+    [4341] = {
+        name = "卓越符文手镯",
+        type = "饰品",
+        lv = 110,
+        quality = QUALITY_ENUM[3],
+        atk = 3488,
+        hp = 2325,
+        otherAttr = {{50005,0.05},{50006,0.1},},
+    },
+    [4342] = {
+        name = "传奇符文手镯",
+        type = "饰品",
+        lv = 120,
+        quality = QUALITY_ENUM[4],
+        atk = 5826,
+        hp = 3884,
+        otherAttr = {{50005,0.1},{50006,0.1},},
+    },
+    [4343] = {
+        name = "卓越飞云冠",
+        type = "帽子",
+        lv = 110,
+        quality = QUALITY_ENUM[3],
+        atk = 465,
+        hp = 18598,
+        otherAttr = {{50004,0.1},},
+        otherEffect = {10, 5},
+    },
+    [4344] = {
+        name = "传奇飞云冠",
+        type = "帽子",
+        lv = 120,
+        quality = QUALITY_ENUM[4],
+        atk = 777,
+        hp = 31069,
+        otherAttr = {{50004,0.1},},
+        otherEffect = {10, 10},
+    },
+    [4345] = {
+        name = "远古邪鬼靴",
+        type = "鞋履",
+        lv = 120,
+        quality = QUALITY_ENUM[4],
+        atk = 1554,
+        hp = 15535,
+        otherAttr = {{50011,0.1},},
+        otherEffect = {3, 5},
+    },
+    [4346] = {
+        name = "不朽邪鬼靴",
+        type = "鞋履",
+        lv = 135,
+        quality = QUALITY_ENUM[5],
+        atk = 2960,
+        hp = 29591,
+        otherAttr = {{50011,0.15},},
+        otherEffect = {3, 10},
+    },
+    [4347] = {
+        name = "远古生命战甲",
+        type = "衣服",
+        lv = 120,
+        quality = QUALITY_ENUM[4],
+        atk = 777,
+        hp = 31069,
+        otherAttr = {{50013,0.15},{50007,250},},
+    },
+    [4348] = {
+        name = "不朽生命战甲",
+        type = "衣服",
+        lv = 135,
+        quality = QUALITY_ENUM[5],
+        atk = 1480,
+        hp = 59182,
+        otherAttr = {{50013,0.2},{50007,500},{50014,0.3},},
+    },
+    [4349] = {
+        name = "碧血戒指",
+        type = "饰品",
+        lv = 135,
+        quality = QUALITY_ENUM[5],
+        atk = 11097,
+        hp = 7398,
+        otherAttr = {{50013,0.25},{50007,200},},
+        otherEffect = {7, 100},
+    },
+    [4350] = {
+        name = "无边黑暗之盾",
+        type = "盾牌",
+        lv = 150,
+        quality = QUALITY_ENUM[6],
+        atk = 3310,
+        hp = 132387,
+        otherAttr = {{50002,60},{50012,0.2},{50011,0.2},},
+        otherEffect = {2, 25},
+    },
 }

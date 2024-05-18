@@ -128,4 +128,3 @@ function handle_backpack_ui_click(event)
     end
 end
 ScriptSupportEvent:registerEvent('UI.Button.Click', handle_backpack_ui_click)
-

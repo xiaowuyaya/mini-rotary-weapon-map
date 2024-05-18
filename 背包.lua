@@ -12,7 +12,7 @@ function PlayerBackpack.init(uid)
     -- 默认背包数据
     local DEFAULT_BACKPACK_DATA = {
         dressed = {
-            weapon1 = 4098,
+            weapon1 = nil,
             weapon2 = nil,
             weapon3 = nil,
             weapon4 = nil,
@@ -24,7 +24,7 @@ function PlayerBackpack.init(uid)
             shield = nil
         },
         undressed = {
-            weapon = {4098, 4103},
+            weapon = {},
             hat = {},
             clothes = {},
             shoes = {},
@@ -32,7 +32,7 @@ function PlayerBackpack.init(uid)
             bracelet = {},
             shield = {}
         },
-        items = {}
+        items = {{4148, 1}, {4149, 2}, {4150, 3}, {4151, 4}, {4152, 5}, {4153, 6}, {4154, 7}}
     }
     --  {4152, 999}, {4153, 999}, {4154, 999}}
     --  items = {{4155, 999}, {4156, 999}, {4157, 1}, {4158, 1}, {4148, 999}, {4149, 999}, {4150, 999}, {4151, 999},
@@ -177,8 +177,23 @@ function PlayerBackpack.calculateAttr(uid)
 
             local _, lv = Valuegroup:getValueNoByName(17, "装备槽强化等级", findQianhuaIndex(dressedType), uid)
 
-            hp = hp + itemInfo['hp'] + itemInfo['hp'] * (lv * 0.01)
-            atk = atk + itemInfo['atk'] + itemInfo['atk'] * (lv * 0.01)
+            -- 1 - 100  1%
+            -- 101 - 200  2%
+            -- 201 - 300  3%
+            local function calculateEnhancementPercentage(bfblevel)
+                if bfblevel < 100 then
+                    return bfblevel * 0.01
+                elseif bfblevel < 200 then
+                    return 1 + (bfblevel - 100) * 0.02
+                elseif bfblevel < 300 then
+                    return 3 + (bfblevel - 200) * 0.03
+                else
+                    return 6 + (bfblevel - 300) * 0.03
+                end
+            end
+
+            hp = hp + itemInfo['hp'] + itemInfo['hp'] * calculateEnhancementPercentage(lv)
+            atk = atk + itemInfo['atk'] + itemInfo['atk'] * calculateEnhancementPercentage(lv)
 
             if itemInfo['otherAttr'] ~= nil then
                 for _, v in ipairs(itemInfo['otherAttr']) do
@@ -268,7 +283,7 @@ function PlayerBackpack.changWeaponSkin(uid)
                 x = 0,
                 y = 0,
                 z = 0
-            }, 0, 0, 2)
+            }, 0, 0, 30)
             print("PlayerBackpack.changWeaponSkin 更改武器皮肤结果: ", result, weaponId,
                 PlayerBackpack[uid].dressed["weapon" .. i], imgInfo, result)
         else
@@ -277,7 +292,7 @@ function PlayerBackpack.changWeaponSkin(uid)
                 x = 0,
                 y = 0,
                 z = 0
-            }, 0, 0, 2)
+            }, 0, 0, 30)
             print("PlayerBackpack.changWeaponSkin 更改武器皮肤结果: ", result, weaponId, 4098, imgInfo, result)
         end
     end
@@ -366,6 +381,8 @@ function PlayerBackpack.useItem(uid, itemid)
                     return
                 end
 
+            elseif ALL_BACKPACK_ITEMS[itemid].effect == 'tp' then
+                Player:openUIView(uid, '7367834196303616224') -- 给玩家打开界面
             end
 
             -- 移除道具数量
@@ -1047,10 +1064,22 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
             local _, lv = Valuegroup:getValueNoByName(17, "装备槽强化等级",
                 UIBackpack.ELEMENT_ID.LEFT_CELLS[uielement].index, uid)
 
+            local function calculateEnhancementPercentage(bfblevel)
+                if bfblevel < 100 then
+                    return bfblevel * 0.01
+                elseif bfblevel < 200 then
+                    return 1 + (bfblevel - 100) * 0.02
+                elseif bfblevel < 300 then
+                    return 3 + (bfblevel - 200) * 0.03
+                else
+                    return 6 + (bfblevel - 300) * 0.03
+                end
+            end
+
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.qianghua1,
-                "+" .. math.floor(iteminfo.atk * lv * 0.01))
+                "+" .. math.floor(iteminfo.atk * (calculateEnhancementPercentage(lv))))
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.qianghua2,
-                "+" .. math.floor(iteminfo.hp * lv * 0.01))
+                "+" .. math.floor(iteminfo.hp * (calculateEnhancementPercentage(lv))))
 
             Customui:setTexture(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.panel_bg,
                 UIBackpack.ELEMENT_ID.QUALITY_BG[iteminfo['quality']][2])
