@@ -109,7 +109,7 @@ function handleRhUIShow(event)
     for i, uiArr in ipairs(RH_ELEMENT.ITEMS) do
         if RH_TABLE[itemid].bp[i] ~= nil then
             Customui:setText(uid, RH_ELEMENT.MAIN, uiArr.NAME, ALL_BACKPACK_ITEMS[RH_TABLE[itemid].bp[i]].name)
-            local _, bpidx = Valuegroup:getGroupNoByValue(21, "道具类型组", bpid, 0)
+            local _, bpidx = Valuegroup:getGroupNoByValue(21, "道具类型组", RH_TABLE[itemid].bp[i], 0)
             local _, bpiconid = Valuegroup:getValueNoByName(18, "道具图片组", bpidx, 0)
             Customui:setTexture(uid, RH_ELEMENT.MAIN, uiArr.ICON, bpiconid)
 

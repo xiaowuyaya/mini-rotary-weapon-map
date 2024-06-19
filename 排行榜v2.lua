@@ -1,4 +1,91 @@
+-- 排行榜数据 { uid: {name, lv, source, time, xiaofei, rank}}
 RankTableData = {}
+
+function loop_time_save_rank_table(event)
+    local current = event.second
+    if (current ~= nil and current >= 60 and (current - 60) % 60 == 0) then
+        print("loop_time_save_player_backpack: 开始定时保存玩家排行榜数据")
+
+        local ret, players = Valuegroup:getAllGroupItem(7, "所有玩家组", 0)
+
+        if ret ~= ErrorCode.OK then
+            return
+        end
+
+        local callback = function(ret, k, v)
+            if ret == ErrorCode.OK then
+                local cloudData = CopyTableDeep(v)
+
+                for i, uid in ipairs(players) do
+                    local _, lv = VarLib2:getPlayerVarByName(uid, 3, "等级")
+                    local _, source = VarLib2:getPlayerVarByName(uid, 3, "玩家评分")
+                    local _, time = VarLib2:getPlayerVarByName(uid, 3, "玩家游戏时长")
+                    local _, xiaofei = VarLib2:getPlayerVarByName(uid, 3, "玩家消费")
+                    local _, name = Player:getNickname(uid)
+
+                    if source > 10000 then
+                        local data = {
+                            name = name,
+                            lv = lv,
+                            source = source,
+                            time = time,
+                            xiaofei = xiaofei
+                        }
+                        cloudData["player_"..uid] = data
+                    end
+                end
+                print(cloudData)
+
+                local ret = CloudSever:setDataListBykey("rank", "rank_table", cloudData)
+                print("savePlayerRankSource: 已保存排行榜数据")
+            end
+        end
+        local cloudRet = CloudSever:getDataListByKeyEx('rank', "rank_table", callback)
+    end
+
+    if (current ~= nil and current >= 60 and (current - 60) % 60 == 0) then
+        player_enter_game_rank_table_init()
+    end
+
+end
+ScriptSupportEvent:registerEvent('Game.RunTime', loop_time_save_rank_table)
+
+-- 玩家进入游戏初始化
+function player_enter_game_rank_table_init()
+    local callback = function(ret, k, v)
+        if ret == ErrorCode.OK then
+            RankTableData = {}
+            print("getRankTableData callback 云服获取排行榜数据成功: ", k)
+            local tempData = CopyTableDeep(v)
+
+            for _, v in pairs(tempData) do
+                table.insert(RankTableData, v)
+            end
+
+            table.sort(RankTableData, function(a, b)
+                return a.source > b.source
+            end)
+
+            for i, v in ipairs(RankTableData) do
+                v.index = i
+            end
+
+        else
+            print("getRankTableData callback 云服获取排行榜数据失败: ", ret)
+            if ret == 2 then
+                print("getRankTableData callback 不存在k数据", k)
+                local ret = CloudSever:setDataListBykey("rank", "rank_table", {})
+            else
+                print("getRankTableData callback 云服获取玩家背包数据失败: ", ret)
+            end
+        end
+    end
+    local cloudRet = CloudSever:getDataListByKeyEx('rank', "rank_table", callback)
+    print("getRankTableData 云服获取排行榜数据结果: ", cloudRet)
+end
+ScriptSupportEvent:registerEvent('Game.AnyPlayer.EnterGame', player_enter_game_rank_table_init)
+
+-- UI 相关
 
 RANK_TABLE_ELEMENT_ID = {
     MAIN = "7359881123757234400",
@@ -83,86 +170,6 @@ RANK_TABLE_ELEMENT_ID = {
     }}
 }
 
-function savePlayerRankData(uid)
-    local _, lv = VarLib2:getPlayerVarByName(uid, 3, "等级")
-    local _, source = VarLib2:getPlayerVarByName(uid, 3, "玩家评分")
-    local _, time = VarLib2:getPlayerVarByName(uid, 3, "玩家游戏时长")
-    local _, xiaofei = VarLib2:getPlayerVarByName(uid, 3, "玩家消费")
-    local _, name = Player:getNickname(uid)
-    print(uid)
-    print(lv)
-    print(source)
-    print(time)
-    print(xiaofei)
-
-    local data = {
-        name = name,
-        lv = lv,
-        source = source,
-        time = time,
-        xiaofei = xiaofei
-    }
-
-    if source < 30 then
-        print('savePlayerRankData: 玩家评分小于30，不保存排行榜数据')
-        return
-    end
-
-    local ret = CloudSever:setDataListBykey("rank", "data.player_" .. uid, data)
-    print("loop_time_save_player_backpack: 保存玩家排行榜数据结果", ret)
-end
-
--- 每30秒保存一次玩家背包数据
-function loop_time_save_rank_table(event)
-    local current = event.second
-    if (current ~= nil and current >= 60 and (current - 60) % 60 == 0) then
-        print("loop_time_save_player_backpack: 开始定时保存玩家排行榜数据")
-        for uid, _ in pairs(PlayerBackpack) do
-            if type(uid) == 'number' then
-                savePlayerRankData(uid)
-            end
-        end
-    end
-
-    if (current ~= nil and current >= 65 and (current - 65) % 65 == 0) then
-        getRankTableData()
-    end
-
-end
-ScriptSupportEvent:registerEvent('Game.RunTime', loop_time_save_rank_table)
-
-function getRankTableData()
-    local callback = function(ret, k, v)
-        if ret == ErrorCode.OK then
-            print("getRankTableData callback 云服获取排行榜数据成功: ", k)
-            RankTableData = {}
-            local tempData = CopyTableDeep(v)
-
-            for _, v in pairs(tempData) do
-                table.insert(RankTableData, v)
-            end
-
-            table.sort(RankTableData, function(a, b)
-                return a.source > b.source
-            end)
-
-            for i, v in pairs(RankTableData) do
-                v.index = i
-            end
-
-        else
-            print("getRankTableData callback 云服获取排行榜数据失败: ", ret)
-            if ret == 2 then
-                print("getRankTableData callback 不存在k数据", k)
-            else
-                print("getRankTableData callback 云服获取玩家背包数据失败: ", ret)
-            end
-        end
-    end
-    local cloudRet = CloudSever:getDataListByKeyEx('rank', "data", callback)
-    print("getRankTableData 云服获取排行榜数据结果: ", cloudRet)
-end
-
 current_player_rank_page = {}
 
 function show_rank_ui(event)
@@ -172,7 +179,10 @@ function show_rank_ui(event)
     local uid = event.eventobjid
 
     if current_player_rank_page[uid] == nil then
-        current_player_rank_page[uid] = {page = 1, total = 0}
+        current_player_rank_page[uid] = {
+            page = 1,
+            total = 0
+        }
     end
 
     local _, lv = VarLib2:getPlayerVarByName(uid, 3, "等级")
@@ -200,7 +210,8 @@ function show_rank_ui(event)
     current_player_rank_page[uid].total = math.ceil(#RankTableData / 10)
 
     Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.MY_RANK, "我的排名: " .. myIndex)
-    Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.PAGE_INFO,current_player_rank_page[uid].page .. "/" .. current_player_rank_page[uid].total)
+    Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.PAGE_INFO,
+        current_player_rank_page[uid].page .. "/" .. current_player_rank_page[uid].total)
 
     local start = (current_player_rank_page[uid].page - 1) * 10 + 1
     local end_ = current_player_rank_page[uid].page * 10
@@ -208,12 +219,17 @@ function show_rank_ui(event)
     for i = start, end_ do
         local rowIdx = i - start + 1
         if RankTableData[i] ~= nil then
-            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].RANK, RankTableData[i].index)
-            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].NAME, RankTableData[i].name)
-            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].TIME, RankTableData[i].time)
-            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].XIAOFEI, RankTableData[i].xiaofei)
+            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].RANK,
+                RankTableData[i].index)
+            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].NAME,
+                RankTableData[i].name)
+            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].TIME,
+                RankTableData[i].time)
+            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].XIAOFEI,
+                RankTableData[i].xiaofei)
             Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].LV, RankTableData[i].lv)
-            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].SOURCE, RankTableData[i].source)
+            Customui:setText(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].SOURCE,
+                RankTableData[i].source)
 
             Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].RANK)
             Customui:showElement(uid, RANK_TABLE_ELEMENT_ID.MAIN, RANK_TABLE_ELEMENT_ID.ROW[rowIdx].NAME)
@@ -233,14 +249,8 @@ function show_rank_ui(event)
 end
 ScriptSupportEvent:registerEvent('UI.Show', show_rank_ui)
 
-function player_enter_game_init(event)
-    getRankTableData()
-end
-ScriptSupportEvent:registerEvent('Game.AnyPlayer.EnterGame', player_enter_game_init)
-
-
 function handle_rank_page_ui_click(event)
-    local uid= event.eventobjid
+    local uid = event.eventobjid
     local elementid = event.uielement
 
     if elementid == RANK_TABLE_ELEMENT_ID.NEXT then
@@ -249,7 +259,7 @@ function handle_rank_page_ui_click(event)
             current_player_rank_page[uid].page = current_player_rank_page[uid].total
         end
         show_rank_ui(event)
-        
+
     elseif elementid == RANK_TABLE_ELEMENT_ID.PREV then
         current_player_rank_page[uid].page = current_player_rank_page[uid].page - 1
         if current_player_rank_page[uid].page < 1 then

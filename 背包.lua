@@ -24,7 +24,7 @@ function PlayerBackpack.init(uid)
             shield = nil
         },
         undressed = {
-            weapon = { 4391},
+            weapon = {4391},
             hat = {},
             clothes = {4386},
             shoes = {},
@@ -156,10 +156,10 @@ function PlayerBackpack.calculateAttr(uid)
     local shanghaitisheng = 0
     local jinyanshouyi = 0
     local diaobaolv = 0
-    local gjlbfb = VarLib2:getPlayerVarByName(uid, 3, "攻击力百分比")
-    local fylbfb = VarLib2:getPlayerVarByName(uid, 3, "防御力百分比")
-    local smzbfb = VarLib2:getPlayerVarByName(uid, 3, "生命值百分比")
-    local smzhfbfb = VarLib2:getPlayerVarByName(uid, 3, "生命恢复百分比")
+    local _, gjlbfb = VarLib2:getPlayerVarByName(uid, 3, "攻击力百分比")
+    local _, fylbfb = VarLib2:getPlayerVarByName(uid, 3, "防御力百分比")
+    local _, smzbfb = VarLib2:getPlayerVarByName(uid, 3, "生命值百分比")
+    local _, smzhfbfb = VarLib2:getPlayerVarByName(uid, 3, "生命恢复百分比")
 
     local function findQianhuaIndex(itemType)
         for _, v in pairs(UIBackpack.ELEMENT_ID.LEFT_CELLS) do
@@ -315,6 +315,7 @@ function PlayerBackpack.useItem(uid, itemid)
             if ALL_BACKPACK_ITEMS[itemid].effect == 'hp' then -- 生命药水恢复处理
                 local code = Actor:hasBuff(uid, 50000014)
                 if code ~= 0 then
+                    Actor:addBuff(uid, 50000047, 1, 5)
                     Actor:addHP(uid, ALL_BACKPACK_ITEMS[itemid].value)
                     Actor:addBuff(uid, 50000014, 1, 15 * 24)
                     Actor:playBodyEffectById(uid, 1150, 1)
@@ -334,6 +335,7 @@ function PlayerBackpack.useItem(uid, itemid)
                     local _, playerMaxHP = Actor:getMaxHP(uid)
                     local addHP = math.floor(playerMaxHP * ALL_BACKPACK_ITEMS[itemid].value / 100)
 
+                    Actor:addBuff(uid, 50000047, 1, 5)
                     Actor:addHP(uid, addHP)
                     Actor:addBuff(uid, 50000019, 1, 30 * 24)
                     Actor:playBodyEffectById(uid, 1150, 1)
@@ -420,13 +422,71 @@ function PlayerBackpack.useItem(uid, itemid)
                 local code = Actor:hasBuff(uid, 50000040)
                 if code ~= 0 then
                     Actor:addBuff(uid, 50000038, 1, 8)
-                    Actor:addBuff(uid, 50000040, 1, 15*24)
+                    Actor:addBuff(uid, 50000040, 1, 15 * 24)
                 else
                     local _, ticks = Actor:getBuffLeftTick(uid, 50000040)
                     Player:notifyGameInfo2Self(uid, "药水使用仍在CD冷却中, 剩余时间: " ..
                         math.floor(ticks / 24) .. "秒")
                     return
                 end
+
+            elseif ALL_BACKPACK_ITEMS[itemid].effect == 'add_exp' then
+
+                local code = Actor:hasBuff(uid, 50000019)
+                if code ~= 0 then
+                    local _, current_exp = VarLib2:getPlayerVarByName(uid, 3, "当前经验值")
+                    local _, playerLv = VarLib2:getPlayerVarByName(uid, 3, "等级")
+
+                    local _, lv_exp = Valuegroup:getValueNoByName(18, "等级经验组", playerLv, 0)
+
+                    local add_exp = math.floor(ALL_BACKPACK_ITEMS[itemid].value + lv_exp *
+                                                   ALL_BACKPACK_ITEMS[itemid].bfb * 0.01)
+
+                    VarLib2:setPlayerVarByName(uid, 3, "当前经验值", current_exp + add_exp)
+
+                    Actor:addBuff(uid, 50000019, 1, 30 * 24)
+
+                    Player:notifyGameInfo2Self(uid, "#W道具使用成功，经验+#G" .. formatNumber(add_exp))
+                else
+                    local _, ticks = Actor:getBuffLeftTick(uid, 50000019)
+                    Player:notifyGameInfo2Self(uid,
+                        "使用仍在CD冷却中, 剩余时间: " .. math.floor(ticks / 24) .. "秒")
+                    return
+                end
+
+            elseif ALL_BACKPACK_ITEMS[itemid].effect == 'atk_bfb' then
+                local code = Actor:hasBuff(uid, 50000035)
+                if code ~= 0 then
+                    local _, buffIDImgs = Valuegroup:getAllGroupItem(21, '状态道具类型组', uid)
+                    local findIndexInBuffIdImgs = function()
+                        for i, buffIdImgArrItemid in ipairs(buffIDImgs) do
+                            if ALL_BACKPACK_ITEMS[buffIdImgArrItemid].effect == 'atk_bfb' then
+                                return i
+                            end
+                        end
+
+                        return nil
+                    end
+                    local itemIdx = findIndexInBuffIdImgs() -- 找到的exp类型道具索引
+                    print("PlayerBackpack.useItem 使用厄运道具: ", itemid, itemIdx)
+                    if itemIdx == nil then
+                        Valuegroup:setValueNoByName(21, '状态道具类型组', #buffIDImgs + 1, itemid, uid)
+                        Valuegroup:setValueNoByName(17, 'BUFF时间组', #buffIDImgs + 1,
+                            ALL_BACKPACK_ITEMS[itemid].value, uid)
+                    else
+                        Valuegroup:setValueNoByName(21, '状态道具类型组', itemIdx, itemid, uid)
+                        Valuegroup:setValueNoByName(17, 'BUFF时间组', itemIdx, ALL_BACKPACK_ITEMS[itemid].value, uid)
+                    end
+
+                    Actor:addBuff(uid, 50000035, 1, 15 * 24)
+
+                else
+                    local _, ticks = Actor:getBuffLeftTick(uid, 50000035)
+                    Player:notifyGameInfo2Self(uid, "药水使用仍在CD冷却中, 剩余时间: " ..
+                        math.floor(ticks / 24) .. "秒")
+                    return
+                end
+
 
             end
 
@@ -720,12 +780,12 @@ function UIBackpack.handleNavMenusChange(uid, uielement)
     if UIBackpack.ELEMENT_ID.RIGHT_NAV_MENUS[uielement] == nil then
         return
     end
-    local code = Actor:hasBuff(uid, 50000012)
-    if code == 0 then
-        return
-    end
+    -- local code = Actor:hasBuff(uid, 50000012)
+    -- if code == 0 then
+    --     return
+    -- end
 
-    Actor:addBuff(uid, 50000012, 1, 7)
+    -- Actor:addBuff(uid, 50000012, 1, 7)
 
     for eleId, arr in pairs(UIBackpack.ELEMENT_ID.RIGHT_NAV_MENUS) do
         if eleId ~= uielement then
@@ -872,6 +932,7 @@ end
 ---@param uid number 玩家迷你号
 ---@param itemid number 道具id
 function UIBackpack.handleObjectHuishou(uid, itemid)
+
     local iteminfo = ALL_BACKPACK_ITEMS[itemid]
 
     local _, xianyu = VarLib2:getPlayerVarByName(uid, 3, "仙玉")
@@ -903,7 +964,6 @@ function UIBackpack.handleObjectHuishou(uid, itemid)
             isExist = true
         end
     end
-
     local rmItemIdx = findIndex(PlayerBackpack[uid]['undressed'][UIBackpack.currentSelectMenuType[uid]], itemid)
 
     if rmItemIdx == nil then
@@ -922,12 +982,12 @@ end
 ---@param uid number
 ---@param uielement string
 function UIBackpack.handleAllDetailPanel(uid, uielement)
-    local code = Actor:hasBuff(uid, 50000034)
-    if code == 0 then
-        return
-    end
+    -- local code = Actor:hasBuff(uid, 50000034)
+    -- if code == 0 then
+    --     return
+    -- end
 
-    Actor:addBuff(uid, 50000034, 1, 10)
+    -- Actor:addBuff(uid, 50000034, 1, 10)
     local isBaifengbiNums = {50004, 50005, 50004, 50006, 50008, 50009, 50010, 50011, 50012, 50013, 50014}
 
     if isInArray(UIBackpack.ELEMENT_ID.RIGHT_CELLS, uielement) then -- 显示右侧详细面板
@@ -1188,12 +1248,12 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.panel)
         Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.DETAIL_PANEL.items.panel)
     elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.huishou then -- 点击右侧面板回收按钮
-        local code = Actor:hasBuff(uid, 50000012)
-        if code == 0 then
-            return
-        end
+        -- local code = Actor:hasBuff(uid, 50000012)
+        -- if code == 0 then
+        --     return
+        -- end
 
-        Actor:addBuff(uid, 50000012, 1, 7)
+        -- Actor:addBuff(uid, 50000012, 1, 7)
 
         Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.BLACK_BG)
         Customui:showElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.MAIN)
@@ -1209,26 +1269,36 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.QIANGHUASHI,
             tostring(setQianghuashi))
     elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.huishou_ok then -- 处理回收
-        local code = Actor:hasBuff(uid, 50000031)
-        if code == 0 then
+        -- local code = Actor:hasBuff(uid, 50000031)
+        -- if code == 0 then
+        --     return
+        -- end
+
+        -- Actor:addBuff(uid, 50000031, 1, 72)
+
+        local check = checkItemExist(uid, UIBackpack.currentSelectItemId[uid])
+        if check == false then
             return
         end
 
-        Actor:addBuff(uid, 50000031, 1, 72)
-        Player:notifyGameInfo2Self(uid, "回收成功")
-
         UIBackpack.handleObjectHuishou(uid, UIBackpack.currentSelectItemId[uid])
+
+        Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.MAIN)
+        Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.BLACK_BG)
 
         UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
 
         UIBackpack.handlePaginationText(uid)
-    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.undress then -- 脱下装备处理
-        local code = Actor:hasBuff(uid, 50000032)
-        if code == 0 then
-            return
-        end
 
-        Actor:addBuff(uid, 50000032, 1, 24)
+        Player:notifyGameInfo2Self(uid, "回收成功")
+
+    elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.left.undress then -- 脱下装备处理
+        -- local code = Actor:hasBuff(uid, 50000032)
+        -- if code == 0 then
+        --     return
+        -- end
+
+        -- Actor:addBuff(uid, 50000032, 1, 24)
 
         local currentSelectLeftCell = UIBackpack.currentSelectLeftCell[uid]
         print("UIBackpack.handleAllDetailPanel 脱下装备处理", currentSelectLeftCell)
@@ -1250,12 +1320,17 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         UIBackpack.handlePaginationText(uid)
         PlayerBackpack.changWeaponSkin(uid)
     elseif uielement == UIBackpack.ELEMENT_ID.DETAIL_PANEL.right.dress then -- 穿上装备处理
-        local code = Actor:hasBuff(uid, 50000030)
-        if code == 0 then
+        -- local code = Actor:hasBuff(uid, 50000030)
+        -- if code == 0 then
+        --     return
+        -- end
+
+        -- Actor:addBuff(uid, 50000030, 1, 36)
+
+        local check = checkItemExist(uid, UIBackpack.currentSelectItemId[uid])
+        if check == false then
             return
         end
-
-        Actor:addBuff(uid, 50000030, 1, 36)
 
         local iteminfo = ALL_BACKPACK_ITEMS[UIBackpack.currentSelectItemId[uid]]
         print("UIBackpack.handleAllDetailPanel 穿上装备处理", iteminfo)
@@ -1435,12 +1510,12 @@ function UIBackpack.handleSortCells(uid, uielement)
     if uielement ~= UIBackpack.ELEMENT_ID.SORT_BTN then
         return
     end
-    local code = Actor:hasBuff(uid, 50000012)
-    if code == 0 then
-        return
-    end
+    -- local code = Actor:hasBuff(uid, 50000012)
+    -- if code == 0 then
+    --     return
+    -- end
 
-    Actor:addBuff(uid, 50000012, 1, 10)
+    -- Actor:addBuff(uid, 50000012, 1, 10)
 
     local menuType = UIBackpack.currentSelectMenuType[uid]
 
@@ -1519,6 +1594,7 @@ end
 ---@param uielement string
 function UIBackpack.handleHuishouUI(uid, uielement)
     for type, arr in pairs(UIBackpack.ELEMENT_ID.HUISHOU_UI.btn) do
+
         if arr[1] == uielement then
             if UIBackpack.cureentSelectHuishouTypes[uid] == nil then
                 UIBackpack.cureentSelectHuishouTypes[uid] = {
@@ -1543,12 +1619,30 @@ function UIBackpack.handleHuishouUI(uid, uielement)
     end
 
     if uielement == UIBackpack.ELEMENT_ID.HUISHOU_UI.ok then
-        local code = Actor:hasBuff(uid, 50000031)
-        if code == 0 then
+
+        if UIBackpack.currentSelectMenuType[uid] == 'items' then
+            -- 道具 不做回收处理
+            Player:notifyGameInfo2Self(uid, "道具无法回收")
             return
         end
 
-        Actor:addBuff(uid, 50000031, 1, 72)
+        -- 初始化回收类型
+        if UIBackpack.cureentSelectHuishouTypes[uid] == nil then
+            UIBackpack.cureentSelectHuishouTypes[uid] = {
+                ["普通"] = false,
+                ["精良"] = false,
+                ["完美"] = false,
+                ["史诗"] = false,
+                ["传说"] = false
+            }
+        end
+
+        -- local code = Actor:hasBuff(uid, 50000031)
+        -- if code == 0 then
+        --     return
+        -- end
+
+        -- Actor:addBuff(uid, 50000031, 1, 72)
 
         local tempArr = {}
 
@@ -1567,9 +1661,12 @@ function UIBackpack.handleHuishouUI(uid, uielement)
             print("UIBackpack.handleHuishouUI 已处理回收", tempId)
         end
 
+        -- Customui:hideElement(uid, UIBackpack.ELEMENT_ID.MAIN, UIBackpack.ELEMENT_ID.HUISHOU.BLACK_BG)
+
         UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
 
         UIBackpack.handlePaginationText(uid)
+
     end
 end
 
@@ -1581,12 +1678,12 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
         return
     end
 
-    local code = Actor:hasBuff(uid, 50000012)
-    if code == 0 then
-        return
-    end
+    -- local code = Actor:hasBuff(uid, 50000012)
+    -- if code == 0 then
+    --     return
+    -- end
 
-    Actor:addBuff(uid, 50000012, 1, 10)
+    -- Actor:addBuff(uid, 50000012, 1, 10)
 
     PlayerBackpack.calculateAttr(uid)
 
@@ -1662,3 +1759,6 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
 
     UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
 end
+
+
+

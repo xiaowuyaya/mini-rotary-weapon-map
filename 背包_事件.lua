@@ -1,4 +1,3 @@
-
 -- 玩家进入游戏初始化
 function player_enter_game_init(event)
     PlayerBackpack.init(event.eventobjid)
@@ -39,6 +38,13 @@ end
 ScriptSupportEvent:registerEvent('UI.Show', show_backpack_ui)
 
 function handle_backpack_ui_click(event)
+   
+    local code = Actor:hasBuff(event.eventobjid, 50000034)
+    if code == 0 then
+        return
+    end
+    Actor:addBuff(event.eventobjid, 50000034, 1, 24 * 60)
+
     UIBackpack.handleNavMenusChange(event.eventobjid, event.uielement)
     UIBackpack.handleAllDetailPanel(event.eventobjid, event.uielement)
     UIBackpack.handlePaginationLogic(event.eventobjid, event.uielement)
@@ -46,8 +52,13 @@ function handle_backpack_ui_click(event)
     UIBackpack.handleChangeKuaijielan(event.eventobjid, event.uielement)
     UIBackpack.handleHuishouUI(event.eventobjid, event.uielement)
     UIBackpack.handleQianghuaOK(event.eventobjid, event.uielement)
+
+    Actor:addBuff(event.eventobjid, 50000031, 1, 7)
+    print("gei buff")
+
 end
 ScriptSupportEvent:registerEvent('UI.Button.Click', handle_backpack_ui_click)
+
 
 function handle_player_add_buff(event)
     if event.buffid == 50000010 then
@@ -56,6 +67,14 @@ function handle_player_add_buff(event)
 end
 ScriptSupportEvent:registerEvent('Player.AddBuff', handle_player_add_buff)
 
+function handle_player_remove_buff(event)
+    if event.buffid == 50000031 then
+        local code = Buff:removeBuff(event.eventobjid, 50000034)
+        print("yichu buff")
+    end
+end
+
+ScriptSupportEvent:registerEvent('Player.RemoveBuff', handle_player_remove_buff)
 
 function handle_player_new_input_content(event)
     if event.content == "清空所有玩家数据1224" then
