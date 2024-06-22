@@ -24,15 +24,15 @@ function PlayerBackpack.init(uid)
             shield = nil
         },
         undressed = {
-            weapon = {4391},
+            weapon = {},
             hat = {},
-            clothes = {4386},
+            clothes = {},
             shoes = {},
             ring = {},
-            bracelet = {4381},
+            bracelet = {},
             shield = {}
         },
-        items = {{4154, 1}, {4394, 4}}
+        items = { {4457, 999}, {4458, 999}, {4459, 999}}
     }
     --  {4152, 999}, {4153, 999}, {4154, 999}}
     --  items = {{4155, 999}, {4156, 999}, {4157, 1}, {4158, 1}, {4148, 999}, {4149, 999}, {4150, 999}, {4151, 999},
@@ -156,10 +156,10 @@ function PlayerBackpack.calculateAttr(uid)
     local shanghaitisheng = 0
     local jinyanshouyi = 0
     local diaobaolv = 0
-    local _, gjlbfb = VarLib2:getPlayerVarByName(uid, 3, "攻击力百分比")
-    local _, fylbfb = VarLib2:getPlayerVarByName(uid, 3, "防御力百分比")
-    local _, smzbfb = VarLib2:getPlayerVarByName(uid, 3, "生命值百分比")
-    local _, smzhfbfb = VarLib2:getPlayerVarByName(uid, 3, "生命恢复百分比")
+    local  gjlbfb = VarLib2:getPlayerVarByName(uid, 3, "攻击力百分比")
+    local fylbfb = VarLib2:getPlayerVarByName(uid, 3, "防御力百分比")
+    local smzbfb = VarLib2:getPlayerVarByName(uid, 3, "生命值百分比")
+    local  smzhfbfb = VarLib2:getPlayerVarByName(uid, 3, "生命恢复百分比")
 
     local function findQianhuaIndex(itemType)
         for _, v in pairs(UIBackpack.ELEMENT_ID.LEFT_CELLS) do
@@ -315,7 +315,7 @@ function PlayerBackpack.useItem(uid, itemid)
             if ALL_BACKPACK_ITEMS[itemid].effect == 'hp' then -- 生命药水恢复处理
                 local code = Actor:hasBuff(uid, 50000014)
                 if code ~= 0 then
-                    Actor:addBuff(uid, 50000047, 1, 5)
+                    Actor:addBuff(uid, 50000048, 1, 5)
                     Actor:addHP(uid, ALL_BACKPACK_ITEMS[itemid].value)
                     Actor:addBuff(uid, 50000014, 1, 15 * 24)
                     Actor:playBodyEffectById(uid, 1150, 1)
@@ -335,7 +335,7 @@ function PlayerBackpack.useItem(uid, itemid)
                     local _, playerMaxHP = Actor:getMaxHP(uid)
                     local addHP = math.floor(playerMaxHP * ALL_BACKPACK_ITEMS[itemid].value / 100)
 
-                    Actor:addBuff(uid, 50000047, 1, 5)
+                    Actor:addBuff(uid, 50000048, 1, 5)
                     Actor:addHP(uid, addHP)
                     Actor:addBuff(uid, 50000019, 1, 30 * 24)
                     Actor:playBodyEffectById(uid, 1150, 1)
@@ -423,6 +423,7 @@ function PlayerBackpack.useItem(uid, itemid)
                 if code ~= 0 then
                     Actor:addBuff(uid, 50000038, 1, 8)
                     Actor:addBuff(uid, 50000040, 1, 15 * 24)
+                    Player:notifyGameInfo2Self(uid, "#G道具使用成功" )
                 else
                     local _, ticks = Actor:getBuffLeftTick(uid, 50000040)
                     Player:notifyGameInfo2Self(uid, "药水使用仍在CD冷却中, 剩余时间: " ..
@@ -432,7 +433,7 @@ function PlayerBackpack.useItem(uid, itemid)
 
             elseif ALL_BACKPACK_ITEMS[itemid].effect == 'add_exp' then
 
-                local code = Actor:hasBuff(uid, 50000019)
+                local code = Actor:hasBuff(uid, 50000049)
                 if code ~= 0 then
                     local _, current_exp = VarLib2:getPlayerVarByName(uid, 3, "当前经验值")
                     local _, playerLv = VarLib2:getPlayerVarByName(uid, 3, "等级")
@@ -443,19 +444,20 @@ function PlayerBackpack.useItem(uid, itemid)
                                                    ALL_BACKPACK_ITEMS[itemid].bfb * 0.01)
 
                     VarLib2:setPlayerVarByName(uid, 3, "当前经验值", current_exp + add_exp)
+                    Actor:addBuff(uid, 50000002, 1, 5)
 
-                    Actor:addBuff(uid, 50000019, 1, 30 * 24)
+                    Actor:addBuff(uid, 50000049, 1, 24)
 
                     Player:notifyGameInfo2Self(uid, "#W道具使用成功，经验+#G" .. formatNumber(add_exp))
                 else
-                    local _, ticks = Actor:getBuffLeftTick(uid, 50000019)
+                    local _, ticks = Actor:getBuffLeftTick(uid, 50000049)
                     Player:notifyGameInfo2Self(uid,
                         "使用仍在CD冷却中, 剩余时间: " .. math.floor(ticks / 24) .. "秒")
                     return
                 end
 
             elseif ALL_BACKPACK_ITEMS[itemid].effect == 'atk_bfb' then
-                local code = Actor:hasBuff(uid, 50000035)
+                local code = Actor:hasBuff(uid, 50000050)
                 if code ~= 0 then
                     local _, buffIDImgs = Valuegroup:getAllGroupItem(21, '状态道具类型组', uid)
                     local findIndexInBuffIdImgs = function()
@@ -478,11 +480,13 @@ function PlayerBackpack.useItem(uid, itemid)
                         Valuegroup:setValueNoByName(17, 'BUFF时间组', itemIdx, ALL_BACKPACK_ITEMS[itemid].value, uid)
                     end
 
-                    Actor:addBuff(uid, 50000035, 1, 15 * 24)
+                    Actor:addBuff(uid, 50000050, 1, 15 * 24)
+                    Actor:addBuff(uid, 50000003, 1, 24)
+                    Player:notifyGameInfo2Self(uid, "#G道具使用成功" )
 
                 else
-                    local _, ticks = Actor:getBuffLeftTick(uid, 50000035)
-                    Player:notifyGameInfo2Self(uid, "药水使用仍在CD冷却中, 剩余时间: " ..
+                    local _, ticks = Actor:getBuffLeftTick(uid, 50000050)
+                    Player:notifyGameInfo2Self(uid, "道具使用仍在CD冷却中, 剩余时间: " ..
                         math.floor(ticks / 24) .. "秒")
                     return
                 end
@@ -1126,6 +1130,8 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
                                     return findArr[2]
                                 end
                             end
+
+                            return 0
                         end
 
                         Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN,
@@ -1277,7 +1283,7 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         -- Actor:addBuff(uid, 50000031, 1, 72)
 
         local check = checkItemExist(uid, UIBackpack.currentSelectItemId[uid])
-        if check == false then
+        if check ~= true then
             return
         end
 
@@ -1328,7 +1334,7 @@ function UIBackpack.handleAllDetailPanel(uid, uielement)
         -- Actor:addBuff(uid, 50000030, 1, 36)
 
         local check = checkItemExist(uid, UIBackpack.currentSelectItemId[uid])
-        if check == false then
+        if check ~= true then
             return
         end
 
@@ -1581,6 +1587,7 @@ function UIBackpack.handleMainKuaijiejian(uid)
                         return findArr[2]
                     end
                 end
+                return 0
             end
 
             Customui:setText(uid, UIBackpack.ELEMENT_ID.MAIN_UI, UIBackpack.ELEMENT_ID.MAIN_KUAIJIEJIAN["no" .. i][2],
@@ -1759,6 +1766,3 @@ function UIBackpack.handleQianghuaOK(uid, uielement)
 
     UIBackpack.handleShowAllRightCell(uid, UIBackpack.currentSelectMenuType[uid])
 end
-
-
-

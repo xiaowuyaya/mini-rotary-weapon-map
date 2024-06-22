@@ -191,11 +191,23 @@ function handle_playerinfo_click(event)
 
             local _, lv = Valuegroup:getValueNoByName(17, "装备槽强化等级",
                 PLAYER_INFO_ELEMENT_ID.INFO[uielement].index, tagetId)
+            
+            local function calculateEnhancementPercentage(bfblevel)
+                if bfblevel < 100 then
+                    return bfblevel * 0.01
+                elseif bfblevel < 200 then
+                    return 1 + (bfblevel - 100) * 0.02
+                elseif bfblevel < 300 then
+                    return 3 + (bfblevel - 200) * 0.03
+                else
+                    return 6 + (bfblevel - 300) * 0.03
+                end
+            end
 
             Customui:setText(uid, PLAYER_INFO_ELEMENT_ID.MAIN, PLAYER_INFO_ELEMENT_ID.PANEL.qianghua1,
-                "+" .. math.floor(iteminfo.atk * lv * 0.01))
+                "+" .. math.floor(iteminfo.atk *(calculateEnhancementPercentage(lv))))
             Customui:setText(uid, PLAYER_INFO_ELEMENT_ID.MAIN, PLAYER_INFO_ELEMENT_ID.PANEL.qianghua2,
-                "+" .. math.floor(iteminfo.hp * lv * 0.01))
+                "+" .. math.floor(iteminfo.hp * (calculateEnhancementPercentage(lv))))
 
             Customui:setTexture(uid, PLAYER_INFO_ELEMENT_ID.MAIN, PLAYER_INFO_ELEMENT_ID.PANEL.panel_bg,
                 PLAYER_INFO_ELEMENT_ID.QUALITY_BG[iteminfo['quality']][2])

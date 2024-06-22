@@ -55,12 +55,13 @@ function show_showtuposhihecheng_ok_ui(event)
     local uid = event.eventobjid
     local uielementid = event.uielement
 
-    local code = Actor:hasBuff(uid, 50000012)
+    local code = Actor:hasBuff(uid, 50000033)
     if code == 0 then
+                        Player:notifyGameInfo2Self(uid, "合成台冷却中")
         return
     end
 
-    Actor:addBuff(uid, 50000012, 1, 7)
+    Actor:addBuff(uid, 50000033, 1, 120)
 
     if isInArray(ELEMENT_ID_TPHC.BTN, uielementid) ~= true then
         return
@@ -77,6 +78,7 @@ function show_showtuposhihecheng_ok_ui(event)
     end
 
     local _, xianyu = VarLib2:getPlayerVarByName(uid, 3, "仙玉")
+        local _, xianyuxiaofei = VarLib2:getPlayerVarByName(uid, 3, "玩家消费")
     local _, qianbi = VarLib2:getPlayerVarByName(uid, 3, "钱币")
 
     local needAddItem = 0
@@ -108,6 +110,7 @@ function show_showtuposhihecheng_ok_ui(event)
             end
 
             VarLib2:setPlayerVarByName(uid, 3, "仙玉", xianyu - use_xianyu_num[idx] * userSelectNum)
+              VarLib2:setPlayerVarByName(uid, 3, "玩家消费", xianyuxiaofei + use_xianyu_num[idx] * userSelectNum)
             VarLib2:setPlayerVarByName(uid, 3, "钱币", qianbi - use_qianbi_num[idx] * userSelectNum)
 
             needAddItem = tuposhi_ids[idx + 1]

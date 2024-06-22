@@ -46,7 +46,7 @@ local function playerRotaryWeaponInit(event)
     allPlayerAttr[event.eventobjid] = {
         rotaryWeapon = {},
         curAngle = 0,
-        angleRadius = 3,
+        angleRadius = 2.5,
         speed = 0.17
     }
 

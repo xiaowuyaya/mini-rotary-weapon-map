@@ -46,14 +46,14 @@ local function rotryWeaponCollideHandle(event)
 
                 if allOtherEffect[6] ~= 0 then
                     local _, gjl = Creature:getAttr(event.toobjid, 1)
-                    if gjl > 0 then
-                        Creature:setAttr(event.toobjid, 1, gjl - allOtherEffect[6])
+                    if gjl > 1 then
+                        Creature:setAttr(event.toobjid, 1, math.abs( gjl - allOtherEffect[6]) )
                     end
                 end
-
+                
                 if allOtherEffect[5] ~= 0 then
-                    if jinzhanfy > 0 then
-                        Creature:setAttr(event.toobjid, 19, jinzhanfy - allOtherEffect[5])
+                    if jinzhanfy > 1 then
+                        Creature:setAttr(event.toobjid, 19, math.abs(jinzhanfy - allOtherEffect[5]) )
                     end
                 end
 

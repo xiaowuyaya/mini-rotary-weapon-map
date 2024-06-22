@@ -353,6 +353,15 @@ local function showRightBackpackCell(uid, type)
             Customui:showElement(uid, UI_ELEMENT.main, bgElementId)
         end
     end
+
+    local _, bpLimit = VarLib2:getPlayerVarByName(uid, 3, "背包容量")
+    local currentBPNum = #backPack['undressed']['weapon'] + #backPack['undressed']['hat'] +
+                             #backPack['undressed']['clothes'] + #backPack['undressed']['shoes'] +
+                             #backPack['undressed']['ring'] + #backPack['undressed']['bracelet'] +
+                             #backPack['undressed']['shield'] + #backPack['items']
+
+    Customui:setText(uid, UI_ELEMENT.main, UI_ELEMENT.FEN_YE.TEXT, "物品:" .. currentBPNum .. "/" .. bpLimit)
+
 end
 
 local function handlePaginationLogic(uid, ui)
@@ -487,24 +496,10 @@ local function showLeftTradeItemCell(uid)
     end
 
     -- 手续费
-    Customui:setText(uid, UI_ELEMENT.main, UI_ELEMENT.feeText, "手续费")
+    print(tradeList[tradeNo][role].fee)
+    Customui:setText(uid, UI_ELEMENT.main, UI_ELEMENT.feeText, tradeList[tradeNo][role].fee .. "")
 end
 
--- 交易面板打开UI逻辑
-local function handleTradePanelUIShow(event)
-    if event.CustomUI ~= UI_ELEMENT.main then
-        return
-    end
-
-    if currentTradeInfo[event.eventobjid] == nil then
-        local _, tagetId = VarLib2:getPlayerVarByName(event.eventobjid, 6, "交易请求玩家")
-        createTradeInfo(event.eventobjid, tagetId)
-    end
-
-    showRightBackpackCell(event.eventobjid, 'weapon')
-    showLeftTradeItemCell(event.eventobjid)
-end
-ScriptSupportEvent:registerEvent('UI.Show', handleTradePanelUIShow)
 
 -- 交易面板菜单栏切换处理
 local function handleNavMenusChange(uid, uielement)
@@ -531,6 +526,23 @@ local function handleNavMenusChange(uid, uielement)
 
     showRightBackpackCell(uid, localData.selectMenuType[uid])
 end
+
+-- 交易面板打开UI逻辑
+local function handleTradePanelUIShow(event)
+    if event.CustomUI ~= UI_ELEMENT.main then
+        return
+    end
+
+    if currentTradeInfo[event.eventobjid] == nil then
+        local _, tagetId = VarLib2:getPlayerVarByName(event.eventobjid, 6, "交易请求玩家")
+        createTradeInfo(event.eventobjid, tagetId)
+    end
+    handleNavMenusChange(event.eventobjid, '7375134760238520544_133') -- 初始化菜单栏UI状态
+
+    showRightBackpackCell(event.eventobjid, 'weapon')
+    showLeftTradeItemCell(event.eventobjid)
+end
+ScriptSupportEvent:registerEvent('UI.Show', handleTradePanelUIShow)
 
 -- 整理装备逻辑
 local function handleSortCells(uid)
@@ -846,6 +858,22 @@ local function confirmTrade(uid, elementId)
         return
     end
 
+    local _, myXianyu = VarLib2:getPlayerVarByName(myTradeInfo.uid, 3, "仙玉")
+    local _, targetXianyu = VarLib2:getPlayerVarByName(targetTradeInfo.uid, 3, "仙玉")
+
+    if myXianyu < myTradeInfo.fee then
+        Player:notifyGameInfo2Self(myTradeInfo.uid, "你的仙玉数量不足")
+        Player:notifyGameInfo2Self(targetTradeInfo.uid, "对方仙玉数量不足无法完成交易")
+        return
+    end
+
+    if targetXianyu < targetTradeInfo.fee then
+        Player:notifyGameInfo2Self(myTradeInfo.uid, "对方仙玉数量不足")
+        Player:notifyGameInfo2Self(targetTradeInfo.uid, "你的仙玉数量不足无法完成交易")
+        return
+    end
+
+
     myTradeInfo.confirm = true
 
     -- TODO: 添加buff 用于 当buff存在时，双方都不能操作
@@ -997,13 +1025,10 @@ local function confirmTrade(uid, elementId)
     end
 
     -- TODO: 扣除手续费
+    VarLib2:setPlayerVarByName(myTradeInfo.uid, 3, "仙玉", myXianyu - myTradeInfo.fee)
+    VarLib2:setPlayerVarByName(targetTradeInfo.uid, 3, "仙玉", targetXianyu - targetTradeInfo.fee)
 
     -- 同步背包
-    -- PlayerBackpack[myTradeInfo.uid] = myTempBackpack
-    -- PlayerBackpack[targetTradeInfo.uid] = targetTempBackpack
-    -- PlayerBackpack.save(myTradeInfo.uid)
-    -- PlayerBackpack.save(targetTradeInfo.uid)
-
     local ret = CloudSever:setDataListBykey(MINI_CLOUD_TABLE, "player_" .. myTradeInfo.uid, myTempBackpack)
     local ret = CloudSever:setDataListBykey(MINI_CLOUD_TABLE, "player_" .. targetTradeInfo.uid, targetTempBackpack)
     PlayerBackpack.init(myTradeInfo.uid)
@@ -1028,6 +1053,107 @@ local function confirmTrade(uid, elementId)
 
     Player:notifyGameInfo2Self(consumer.uid, "交易已完成")
     Player:notifyGameInfo2Self(producer.uid, "交易已完成")
+end
+
+-- 计算手续费
+local function caculateTradeFee(uid)
+    local tradeNo = currentTradeInfo[uid].tradeNo
+    local role = currentTradeInfo[uid].role
+
+    local myTradeInfo = nil
+    local targetTradeInfo = nil
+
+    if role == 'consumer' then
+        myTradeInfo = tradeList[tradeNo].consumer
+        targetTradeInfo = tradeList[tradeNo].producer
+    else
+        myTradeInfo = tradeList[tradeNo].producer
+        targetTradeInfo = tradeList[tradeNo].consumer
+    end
+
+    local tempCheckData = {
+        my = {
+            chuanshuotuposhi = 0,
+            shishi = 0,
+            chuanshuo = 0,
+            shenhua = 0
+        },
+        target = {
+            chuanshuotuposhi = 0,
+            shishi = 0,
+            chuanshuo = 0,
+            shenhua = 0
+        }
+    }
+
+    for i, equip in ipairs(myTradeInfo.equip) do
+        local iteminfo = ALL_BACKPACK_ITEMS[equip]
+        if iteminfo.quality == "史诗" then
+            tempCheckData.my.shishi = tempCheckData.my.shishi + 1
+        elseif iteminfo.quality == "传说" then
+            tempCheckData.my.chuanshuo = tempCheckData.my.chuanshuo + 1
+        elseif iteminfo.quality == "神话" then
+            tempCheckData.my.shenhua = tempCheckData.my.shenhua + 1
+        end
+    end
+
+    for i, item in ipairs(myTradeInfo.item) do
+        local iteminfo = ALL_BACKPACK_ITEMS[item[1]]
+        if iteminfo.quality == "传说" then
+            tempCheckData.my.chuanshuotuposhi = tempCheckData.my.chuanshuotuposhi + item[2]
+        end
+    end
+
+    for i, equip in ipairs(targetTradeInfo.equip) do
+        local iteminfo = ALL_BACKPACK_ITEMS[equip]
+        if iteminfo.quality == "史诗" then
+            tempCheckData.target.shishi = tempCheckData.target.shishi + 1
+        elseif iteminfo.quality == "传说" then
+            tempCheckData.target.chuanshuo = tempCheckData.target.chuanshuo + 1
+        elseif iteminfo.quality == "神话" then
+            tempCheckData.target.shenhua = tempCheckData.target.shenhua + 1
+        end
+    end
+
+    for i, item in ipairs(targetTradeInfo.item) do
+        local iteminfo = ALL_BACKPACK_ITEMS[item[1]]
+        if iteminfo.quality == "传说" then
+            tempCheckData.target.chuanshuotuposhi = tempCheckData.target.chuanshuotuposhi + item[2]
+        end
+    end
+
+    local myFee = 0
+    local targetFee = 0
+
+    print(tempCheckData.my)
+    print(tempCheckData.target)
+
+    myFee = myFee + tempCheckData.target.chuanshuotuposhi * 50
+    myFee = myFee + tempCheckData.target.shishi * 10
+    myFee = myFee + tempCheckData.target.chuanshuo * 200
+    myFee = myFee + tempCheckData.target.shenhua * 1000
+
+    myFee = myFee - math.min(tempCheckData.target.chuanshuotuposhi, tempCheckData.my.chuanshuotuposhi) * 50 * 0.5
+    myFee = myFee - math.min(tempCheckData.target.shishi, tempCheckData.my.shishi) * 10 * 0.5
+    myFee = myFee - math.min(tempCheckData.target.chuanshuo, tempCheckData.my.chuanshuo) * 200 * 0.5
+    myFee = myFee - math.min(tempCheckData.target.shenhua, tempCheckData.my.shenhua) * 1000 * 0.5
+
+    targetFee = targetFee + tempCheckData.my.chuanshuotuposhi * 50
+    targetFee = targetFee + tempCheckData.my.shishi * 10
+    targetFee = targetFee + tempCheckData.my.chuanshuo * 200
+    targetFee = targetFee + tempCheckData.my.shenhua * 1000
+
+    targetFee = targetFee - math.min(tempCheckData.target.chuanshuotuposhi, tempCheckData.my.chuanshuotuposhi) * 50 *
+                    0.5
+    targetFee = targetFee - math.min(tempCheckData.target.shishi, tempCheckData.my.shishi) * 10 * 0.5
+    targetFee = targetFee - math.min(tempCheckData.target.chuanshuo, tempCheckData.my.chuanshuo) * 200 * 0.5
+    targetFee = targetFee - math.min(tempCheckData.target.shenhua, tempCheckData.my.shenhua) * 1000 * 0.5
+
+    myTradeInfo.fee = myFee
+    targetTradeInfo.fee = targetFee
+
+    print(myFee)
+    print(targetFee)
 end
 
 -- 将背包物品添加到左侧单元格中逻辑处理
@@ -1116,6 +1242,7 @@ local function addObjectToLeftCell(uid, elementId)
         table.insert(tradeInfo.equip, itemid)
     end
 
+    caculateTradeFee(uid)
     handlePanelHide(uid)
     -- 处理完成后整理背包并显示交易面板UI(双方)
     showLeftTradeItemCell(tradeList[tradeNo].consumer.uid)
@@ -1126,87 +1253,10 @@ local function addObjectToLeftCell(uid, elementId)
     Customui:hideElement(uid, UI_ELEMENT.main, UI_ELEMENT.PANEL.right.tran)
 end
 
--- 计算手续费
-local function caculateTradeFee(uid)
-    local tradeNo = currentTradeInfo[uid].tradeNo
-    local role = currentTradeInfo[uid].role
-
-    local myTradeInfo = nil
-    local targetTradeInfo = nil
-
-    if role == 'consumer' then
-        myTradeInfo = tradeList[tradeNo].consumer
-        targetTradeInfo = tradeList[tradeNo].producer
-    else
-        myTradeInfo = tradeList[tradeNo].producer
-        targetTradeInfo = tradeList[tradeNo].consumer
-    end
-
-    local tempCheckData = {
-        my = {
-            chuanshuotuposhi = 0,
-            shishi = 0,
-            chuanshuo = 0,
-            shenhua = 0
-        },
-        target = {
-            chuanshuotuposhi = 0,
-            shishi = 0,
-            chuanshuo = 0,
-            shenhua = 0
-        }
-    }
-
-    for i, equip in ipairs(myTradeInfo.equip) do
-        local iteminfo = ALL_BACKPACK_ITEMS[equip]
-        if iteminfo.quality == "史诗" then
-            tempCheckData.my.shishi = tempCheckData.my.shishi + 1
-        elseif iteminfo.quality == "传说" then
-            tempCheckData.my.chuanshuo = tempCheckData.my.chuanshuo + 1
-        elseif iteminfo.quality == "神话" then
-            tempCheckData.my.shenhua = tempCheckData.my.shenhua + 1
-        end
-    end
-
-    for i, item in ipairs(myTradeInfo.item) do
-        local iteminfo = ALL_BACKPACK_ITEMS[item[1]]
-        if iteminfo.quality == "传说" then
-            tempCheckData.my.chuanshuotuposhi = tempCheckData.my.chuanshuotuposhi + item[2]
-        end
-    end
-
-    for i, equip in ipairs(targetTradeInfo.equip) do
-        local iteminfo = ALL_BACKPACK_ITEMS[equip]
-        if iteminfo.quality == "史诗" then
-            tempCheckData.target.shishi = tempCheckData.target.shishi + 1
-        elseif iteminfo.quality == "传说" then
-            tempCheckData.target.chuanshuo = tempCheckData.target.chuanshuo + 1
-        elseif iteminfo.quality == "神话" then
-            tempCheckData.target.shenhua = tempCheckData.target.shenhua + 1
-        end
-    end
-
-    for i, item in ipairs(targetTradeInfo.item) do
-        local iteminfo = ALL_BACKPACK_ITEMS[item[1]]
-        if iteminfo.quality == "传说" then
-            tempCheckData.target.chuanshuotuposhi = tempCheckData.target.chuanshuotuposhi + item[2]
-        end
-    end
-
-    local fee = 0
-
-    -- if tempCheckData.my.chuanshuotuposhi == tempCheckData.target.chuanshuotuposhi then
-    --     fee = fee + 50 * tempCheckData.my.chuanshuotuposhi * 0.5
-    -- else
-    --     math.min(tempCheckData.my.chuanshuotuposhi, tempCheckData.target.chuanshuotuposhi)
-    -- end
-
-end
-
--- 处理退出按钮逻辑
+-- 处理退出按钮逻辑··
 local function handleQuitTrade(uid, elementId)
     if elementId == UI_ELEMENT.quit then
-        Player:hideUIView(uin, UI_ELEMENT.main)
+        Player:hideUIView(uid, UI_ELEMENT.main)
     end
 end
 

@@ -12,12 +12,12 @@ function handle_fuben_click(event)
     local uid = event.eventobjid
     local uielement = event.uielement
 
-    local code = Actor:hasBuff(uid, 50000012)
+    local code = Actor:hasBuff(uid, 50000016)
     if code == 0 then
         return
     end
 
-    Actor:addBuff(uid, 50000012, 1, 7)
+    Actor:addBuff(uid, 50000016, 1, 12)
 
     if uielement == UI_ELEMENT_ID.LEFT_OK then
         local _, idx = VarLib2:getPlayerVarByName(uid, 3, "选择的副本类型")
@@ -84,13 +84,11 @@ function handle_fuben_click(event)
 
         reload_fuben_num_ui(uid)
 
-    else
-        if uielement == UI_ELEMENT_ID.SHOW_BTN then
+    elseif uielement == UI_ELEMENT_ID.SHOW_BTN then
             reload_fuben_num_ui(uid)
-        end
     end
 
-    Actor:addBuff(uid, 50000027, 1, 7)
+    Actor:addBuff(uid, 50000027, 1, 3)
 end
 ScriptSupportEvent:registerEvent('UI.Button.Click', handle_fuben_click)
 
