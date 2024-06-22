@@ -211,7 +211,7 @@ local tradeList = {}
 -- 限制交易品质判断
 local function QualityLimitCheck(itemid)
     local iteminfo = ALL_BACKPACK_ITEMS[itemid]
-    if iteminfo.type == '材料' or iteminfo == '消耗品' then
+    if iteminfo.type == '材料' or iteminfo.type == '消耗品' then
         if iteminfo.quality == QUALITY_ENUM[6] or iteminfo.quality == QUALITY_ENUM[7] then
             return false
         end
